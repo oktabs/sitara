@@ -1,27 +1,18 @@
 import Head from "next/head";
-import Navbar from "@/components/company/Navbar";
-import Hero from "@/components/company/Hero";
-import Carousel from "@/components/company/Carousel";
-import Company from "@/components/company/Company";
-import ChatBot from "@/components/company/ChatBot";
-import Footer from "@/components/company/Footer";
+import Navbar from "@/components/global/Navbar";
 
-const HomePage = () => {
+const BerandaPage = () => {
   return (
     <>
       <Head>
-        <title>MekarJS</title>
+        <title>SITARA</title>
       </Head>
       <div>
         <Navbar/>
-        <Carousel/>
-        <Hero/>
-        <Company/>
-        <ChatBot/>
-        <Footer/>
+        <h1 className="text-5xl mt-20 text-black">Beranda</h1>
       </div>
     </>
   );
 }
 
-export default HomePage;
+export default BerandaPage;

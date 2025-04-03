@@ -4,7 +4,7 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <link rel="icon" href="/favicon/F1.png" />
+        <link rel="icon" href="/favicon/F1B.png" />
       </Head>
       <body className="antialiased bg-background">
         <Main />

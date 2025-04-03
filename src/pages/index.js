@@ -1,5 +1,5 @@
 import Head from "next/head";
-import Link from "next/link";
+// import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/global/Navbar";
 

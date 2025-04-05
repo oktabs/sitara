@@ -8,14 +8,14 @@ export const TabLogin = () => {
                     <li className="m-3">
                         <Link className="text-xs" href="/">Beranda</Link>
                     </li>
-                    <li className="m-3">
+                    {/* <li className="m-3">
                         <Link className="text-xs" href="/auth/login/user">User</Link>
                     </li>
                     <li className="m-3">
                         <Link className="text-xs" href="/auth/login/admin">Admin</Link>
-                    </li>
+                    </li> */}
                     <li className="px-5 py-3 text-white bg-blue-500 rounded-full">
-                        <Link className="text-xs" href="/auth/register/user">Register</Link>
+                        <Link className="text-xs" href="/auth/register/user">Belum punya Akun?</Link>
                     </li>
                 </ul>
             </nav>

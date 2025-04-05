@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { TabLogin } from "@/components/global/TabLogin";
+import Link from "next/link";
 
 const UserLoginPage = () => {
   const [email, setEmail] = useState("");
@@ -17,7 +18,7 @@ const UserLoginPage = () => {
         password,
       });
       localStorage.setItem("token", response.data.token);
-      router.push("/dashboard"); // Redirect to user dashboard after login
+      router.push("/role/user"); // Redirect to user dashboard after login
     } catch (error) {
       setError("Invalid credentials or server error.");
     }
@@ -47,7 +48,8 @@ const UserLoginPage = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Login</button><br />
+        <Link className="text-black" href="/auth/login/admin"><u>Login Sebagai Admin</u></Link>
       </form>
     </div>
   );

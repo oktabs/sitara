@@ -12,7 +12,7 @@ export const TabRegister = () => {
                         <Link className="text-xs" href="/auth/register/user">User</Link>
                     </li> */}
                     <li className="px-5 py-3 text-white bg-blue-500 rounded-full">
-                        <Link className="text-xs" href="/auth/login/user">Login</Link>
+                        <Link className="text-xs" href="/auth/login/user">Sudah punya Akun?</Link>
                     </li>
                 </ul>
             </nav>

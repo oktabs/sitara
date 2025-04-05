@@ -2,6 +2,7 @@ import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { TabLogin } from "@/components/global/TabLogin";
+import Link from "next/link";
 
 const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
@@ -47,7 +48,8 @@ const AdminLoginPage = () => {
             required
           />
         </div>
-        <button type="submit">Login</button>
+        <button type="submit">Login</button><br />
+        <Link className="text-black" href="/auth/login/user"><u>Login Sebagai User</u></Link>
       </form>
     </div>
   );

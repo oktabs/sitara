@@ -29,7 +29,9 @@ const AdminLoginPage = () => {
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
         <TabLogin />
-        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">Login Admin</h2>
+        <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          Login Admin
+        </h2>
 
         {error && (
           <div className="bg-red-100 text-red-700 p-3 mb-4 rounded-md text-sm text-center">
@@ -39,7 +41,10 @@ const AdminLoginPage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="email"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Email
             </label>
             <input
@@ -54,7 +59,10 @@ const AdminLoginPage = () => {
           </div>
 
           <div>
-            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
+            <label
+              htmlFor="password"
+              className="block text-sm font-medium text-gray-700 mb-1"
+            >
               Password
             </label>
             <input
@@ -75,9 +83,12 @@ const AdminLoginPage = () => {
             Login
           </button>
 
-          <p className="text-center text-sm mt-3">
+          <p className="text-black text-center text-sm mt-3">
             Login sebagai{" "}
-            <Link href="/auth/login/user" className="text-blue-600 hover:underline">
+            <Link
+              href="/auth/login/user"
+              className="text-blue-600 hover:underline"
+            >
               User
             </Link>
           </p>

@@ -47,7 +47,9 @@ const UserRegisterPage = () => {
         {/* Right Side Form */}
         <div className="p-10 md:p-14">
           <TabRegister />
-          <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">Daftar Sebagai Pengguna</h2>
+          <h2 className="text-3xl font-extrabold text-center mb-6 text-gray-800">
+            Daftar Sebagai Pengguna
+          </h2>
 
           {error && (
             <div className="bg-red-100 text-red-700 p-3 mb-4 rounded-md text-sm text-center">
@@ -57,37 +59,43 @@ const UserRegisterPage = () => {
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Nama Lengkap</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Nama Lengkap
+              </label>
               <input
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="John Doe"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Email</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Email
+              </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="email@example.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-1">Password</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-1">
+                Password
+              </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
+                className="text-black w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500"
                 placeholder="••••••••"
               />
             </div>
@@ -101,7 +109,10 @@ const UserRegisterPage = () => {
 
             <p className="text-center text-sm mt-3 text-gray-600">
               Sudah punya akun?{" "}
-              <Link href="/auth/login/user" className="text-green-600 hover:underline font-medium">
+              <Link
+                href="/auth/login/user"
+                className="text-green-600 hover:underline font-medium"
+              >
                 Login di sini
               </Link>
             </p>

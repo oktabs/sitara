@@ -56,9 +56,11 @@ export default function TambahBeritaPage() {
         <form onSubmit={handleSubmit}>
           <div>
             <label>Judul:</label>
+            <br />
             <input
               type="text"
               name="judul"
+              placeholder="judul berita"
               value={formData.judul}
               onChange={handleChange}
               required
@@ -68,8 +70,10 @@ export default function TambahBeritaPage() {
 
           <div>
             <label>Isi:</label>
+            <br />
             <textarea
               name="isi"
+              placeholder="isi berita"
               value={formData.isi}
               onChange={handleChange}
               required
@@ -79,7 +83,9 @@ export default function TambahBeritaPage() {
 
           <div>
             <label>URL Foto (opsional):</label>
+            <br />
             <input
+              placeholder="url gambar"
               type="text"
               name="foto"
               value={formData.foto}
@@ -89,7 +95,12 @@ export default function TambahBeritaPage() {
 
           {error && <div style={{ color: "red" }}>{error}</div>}
 
-          <button type="submit">Simpan</button>
+          <button
+            className="p-3 border border-black/15 rounded-full w-[200px] mt-2"
+            type="submit"
+          >
+            Simpan
+          </button>
         </form>
       </div>
     </div>

@@ -1,10 +1,10 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { TabLogin } from "@/components/global/TabLogin";
+// import { TabLogin } from "@/components/global/TabLogin";
 import Link from "next/link";
 
-const UserLoginPage = () => {
+const AdminLoginPage = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
@@ -19,7 +19,7 @@ const UserLoginPage = () => {
       });
 
       localStorage.setItem("token", response.data.token);
-      router.push("/role/user");
+      router.push("/role/admin");
     } catch (error) {
       setError("Email atau password salah, atau terjadi kesalahan server.");
     }
@@ -28,9 +28,9 @@ const UserLoginPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <TabLogin />
+        {/* <TabLogin /> */}
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
-          Login User
+          Login Sebagai Admin
         </h2>
 
         {error && (
@@ -53,8 +53,8 @@ const UserLoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-              placeholder="user@example.com"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="admin@example.com"
             />
           </div>
 
@@ -71,7 +71,7 @@ const UserLoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="text-black w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="••••••••"
             />
           </div>
@@ -84,12 +84,8 @@ const UserLoginPage = () => {
           </button>
 
           <p className="text-black text-center text-sm mt-3">
-            Login sebagai{" "}
-            <Link
-              href="/auth/login/admin"
-              className="text-blue-600 hover:underline"
-            >
-              Admin
+            <Link href="/" className="text-blue-600 hover:underline">
+              Kembali ke Beranda
             </Link>
           </p>
         </form>
@@ -98,4 +94,4 @@ const UserLoginPage = () => {
   );
 };
 
-export default UserLoginPage;
+export default AdminLoginPage;

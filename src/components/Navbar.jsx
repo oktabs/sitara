@@ -21,7 +21,7 @@ const Navbar = () => {
             </Link>
           </li>
           <li className="px-5 py-3 text-white bg-blue-500 rounded-full">
-            <Link className="text-xs" href="/auth/login/user">
+            <Link className="text-xs" href="/auth/login">
               Login
             </Link>
           </li>

@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
-import KontraktorSidebar from "@/components/KontraktorSidebar";
+// import KontraktorSidebar from "@/components/KontraktorSidebar";
 
 export default function HapusBeritaPage() {
   const [beritas, setBeritas] = useState([]);

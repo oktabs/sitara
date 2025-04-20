@@ -64,8 +64,11 @@ export default function UpdateProyekRead() {
     <div>
       <KontraktorSidebar />
       <div className="ml-[256px] text-black">
-        <h1>Daftar Proyek</h1>
-        <Link href="/admin/proyek/create">
+        <div className="mt-5"></div>
+        <Link
+          className="p-3 bg-blue-500 text-white rounded-full"
+          href="/admin/proyek/create"
+        >
           <button>Tambah Proyek Baru</button>
         </Link>
 
@@ -110,7 +113,10 @@ export default function UpdateProyekRead() {
                   {/* <Link href={`/admin/proyek/${proyek._id}`}>
                     <button>Edit</button>
                   </Link> */}
-                  <button onClick={() => handleDelete(proyek._id)}>
+                  <button
+                    className="p-3 bg-red-500 rounded-full text-white"
+                    onClick={() => handleDelete(proyek._id)}
+                  >
                     Hapus
                   </button>
                 </td>

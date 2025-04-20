@@ -98,29 +98,32 @@ export default function CreateProyek() {
     <div>
       <KontraktorSidebar />
       <div className="ml-[256px] text-black">
-        <h1>Tambah Proyek Baru</h1>
+        {/* <h1>Tambah Proyek Baru</h1>
         <button onClick={() => router.push("/admin/proyek")}>
           Kembali ke Daftar
-        </button>
+        </button> */}
 
         {error && <div>Error: {error}</div>}
 
         <form onSubmit={handleSubmit}>
           <div>
             <label>URL Gambar Proyek</label>
+            <br />
             <input
               type="url"
               name="url_gambar"
               value={formData.url_gambar}
               onChange={handleChange}
-              placeholder="https://example.com/image.jpg"
+              placeholder="https://gambar.com/image.jpg"
             />
           </div>
 
           <div>
             <label>Nama Proyek*</label>
+            <br />
             <input
               type="text"
+              placeholder="Nama proyek"
               name="nama_proyek"
               value={formData.nama_proyek}
               onChange={handleChange}
@@ -130,8 +133,10 @@ export default function CreateProyek() {
 
           <div>
             <label>Deskripsi Proyek</label>
+            <br />
             <textarea
               name="deskripsi"
+              placeholder="Deskripsi proyek"
               value={formData.deskripsi}
               onChange={handleChange}
               rows={4}
@@ -140,6 +145,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Progress (%)</label>
+            <br />
             <input
               type="number"
               name="progress"
@@ -152,9 +158,11 @@ export default function CreateProyek() {
 
           <div>
             <label>Lokasi Proyek</label>
+            <br />
             <input
               type="text"
               name="lokasi"
+              placeholder="Lokasi proyek"
               value={formData.lokasi}
               onChange={handleChange}
             />
@@ -162,6 +170,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Status Proyek</label>
+            <br />
             <select
               name="status"
               value={formData.status}
@@ -176,6 +185,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Tanggal Mulai</label>
+            <br />
             <input
               type="date"
               name="tanggal_mulai"
@@ -186,6 +196,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Tanggal Selesai</label>
+            <br />
             <input
               type="date"
               name="tanggal_selesai"
@@ -198,6 +209,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Total Anggaran (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.total_anggaran"
@@ -209,6 +221,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Anggaran Terpakai (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.anggaran_terpakai"
@@ -220,6 +233,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Sumber Dana</label>
+            <br />
             <select
               name="detail_anggaran.sumber_dana"
               value={formData.detail_anggaran.sumber_dana}
@@ -235,6 +249,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Dokumen Anggaran (URL)</label>
+            <br />
             <input
               type="url"
               name="detail_anggaran.dokumen_anggaran"
@@ -248,6 +263,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Material (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.komponen_utama.material"
@@ -259,6 +275,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Tenaga Kerja (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.komponen_utama.tenaga_kerja"
@@ -270,6 +287,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Peralatan (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.komponen_utama.peralatan"
@@ -281,6 +299,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Administrasi (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.komponen_utama.administrasi"
@@ -292,6 +311,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Lain-lain (Rp)</label>
+            <br />
             <input
               type="number"
               name="detail_anggaran.komponen_utama.lain_lain"
@@ -303,6 +323,7 @@ export default function CreateProyek() {
 
           <div>
             <label>Tahun Anggaran</label>
+            <br />
             <input
               type="text"
               name="detail_anggaran.tahun_anggaran"
@@ -311,7 +332,11 @@ export default function CreateProyek() {
             />
           </div>
 
-          <button type="submit" disabled={loading}>
+          <button
+            className="p-3 border border-black/15 rounded-full mt-5 mb-5"
+            type="submit"
+            disabled={loading}
+          >
             {loading ? "Menyimpan..." : "Simpan Proyek"}
           </button>
         </form>

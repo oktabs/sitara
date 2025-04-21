@@ -1,9 +1,22 @@
+// src/pages/api/auth/login.js
 import bcrypt from "bcryptjs";
 import User from "@/models/User";
 import connectDB from "@/lib/mongodb";
 import jwt from "jsonwebtoken";
+import Cors from "cors";
+import initMiddleware from "@/lib/middleware";
+
+const cors = initMiddleware(
+  Cors({
+    origin: "*",
+    methods: ["POST", "GET", "OPTIONS"],
+    credentials: true,
+  }),
+);
 
 const login = async (req, res) => {
+  await cors(req, res);
+
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -12,6 +25,17 @@ const login = async (req, res) => {
 
   if (!email || !password) {
     return res.status(400).json({ message: "Please fill all required fields" });
+  }
+
+  // Optional: Email format & password length validation
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters" });
   }
 
   try {

@@ -1,8 +1,21 @@
+// src/pages/api/auth/register.js
 import bcrypt from "bcryptjs";
 import User from "@/models/User";
 import connectDB from "@/lib/mongodb";
+import Cors from "cors";
+import initMiddleware from "@/lib/middleware";
+
+const cors = initMiddleware(
+  Cors({
+    origin: "*",
+    methods: ["POST", "GET", "OPTIONS"],
+    credentials: true,
+  }),
+);
 
 const register = async (req, res) => {
+  await cors(req, res);
+
   if (req.method !== "POST") {
     return res.status(405).json({ message: "Method not allowed" });
   }
@@ -11,6 +24,16 @@ const register = async (req, res) => {
 
   if (!name || !email || !password) {
     return res.status(400).json({ message: "Please fill all required fields" });
+  }
+
+  if (!/^\S+@\S+\.\S+$/.test(email)) {
+    return res.status(400).json({ message: "Invalid email format" });
+  }
+
+  if (password.length < 6) {
+    return res
+      .status(400)
+      .json({ message: "Password must be at least 6 characters" });
   }
 
   try {
@@ -28,7 +51,7 @@ const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: role || "user",
+      role: role || "masyarakat",
     });
 
     await newUser.save();

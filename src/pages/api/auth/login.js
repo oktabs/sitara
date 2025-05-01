@@ -27,7 +27,6 @@ const login = async (req, res) => {
     return res.status(400).json({ message: "Please fill all required fields" });
   }
 
-  // Optional: Email format & password length validation
   if (!/^\S+@\S+\.\S+$/.test(email)) {
     return res.status(400).json({ message: "Invalid email format" });
   }

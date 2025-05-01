@@ -7,7 +7,7 @@ const UserSchema = new mongoose.Schema({
   password: { type: String, required: true },
   role: {
     type: String,
-    enum: ["kontraktor_desa", "admin_kecamatan", "masyarakat"],
+    enum: ["masyarakat", "kontraktor_desa", "admin_kecamatan"],
     default: "masyarakat",
   },
   created_at: { type: Date, default: Date.now },

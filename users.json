@@ -1,0 +1,24 @@
+[
+  {
+    "email": "toktabella@gmail.com",
+    "password": "Okt4b3ll4"
+  },
+  {
+    "name": "Yogawan",
+    "email": "yogawan@gmail.com",
+    "password": "yogawan123",
+    "role": "masyarakat"
+  },
+  {
+    "name": "Oktabella",
+    "email": "oktabella@gmail.com",
+    "password": "oktabella123",
+    "role": "admin_kecamatan"
+  },
+  {
+    "name": "Mikodian",
+    "email": "mikodian@gmail.com",
+    "password": "mikodian123",
+    "role": "kontraktor_desa"
+  }
+]

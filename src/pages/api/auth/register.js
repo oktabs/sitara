@@ -36,6 +36,9 @@ const register = async (req, res) => {
       .json({ message: "Password must be at least 6 characters" });
   }
 
+  const allowedRoles = ["masyarakat", "kontraktor_desa", "admin_kecamatan"];
+  const selectedRole = allowedRoles.includes(role) ? role : "masyarakat";
+
   try {
     await connectDB();
 
@@ -51,7 +54,7 @@ const register = async (req, res) => {
       name,
       email,
       password: hashedPassword,
-      role: role || "masyarakat",
+      role: selectedRole,
     });
 
     await newUser.save();

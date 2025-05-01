@@ -1,8 +1,19 @@
 // src/pages/api/proyek/index.js
 import connectDB from "@/lib/mongodb";
 import Proyek from "@/models/Proyek";
+import Cors from "cors";
+import initMiddleware from "@/lib/middleware";
+
+const cors = initMiddleware(
+  Cors({
+    origin: "*",
+    methods: ["POST", "GET", "OPTIONS"],
+    credentials: true,
+  }),
+);
 
 export default async function handler(req, res) {
+  await cors(req, res);
   await connectDB();
 
   switch (req.method) {

@@ -1,8 +1,19 @@
 // src/pages/api/berita/index.js
 import connectDB from "@/lib/mongodb";
 import Berita from "@/models/Berita";
+import Cors from "cors";
+import initMiddleware from "@/lib/middleware";
+
+const cors = initMiddleware(
+  Cors({
+    origin: "*",
+    methods: ["POST", "GET", "OPTIONS"],
+    credentials: true,
+  }),
+);
 
 export default async function handler(req, res) {
+  await cors(req, res);
   await connectDB();
 
   if (req.method === "POST") {

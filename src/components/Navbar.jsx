@@ -10,7 +10,7 @@ const Navbar = () => {
               Beranda
             </Link>
           </li>
-          <li className="m-3">
+          {/* <li className="m-3">
             <Link className="text-xs" href="/proyek">
               Proyek
             </Link>
@@ -19,7 +19,7 @@ const Navbar = () => {
             <Link className="text-xs" href="/berita">
               Berita
             </Link>
-          </li>
+          </li> */}
           <li className="px-5 py-3 text-white bg-blue-500 rounded-full">
             <Link className="text-xs" href="/auth/login">
               Login

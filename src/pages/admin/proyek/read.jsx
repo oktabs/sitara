@@ -12,23 +12,6 @@ export default function ProyekRead() {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchProyeks = async () => {
-      try {
-        const response = await fetch("/api/proyek");
-        if (!response.ok) throw new Error("Gagal mengambil data proyek");
-        const data = await response.json();
-        setProyeks(data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProyeks();
-  }, []);
-
-  useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.replace("/auth/login");
@@ -53,6 +36,23 @@ export default function ProyekRead() {
 
     html2pdf().set(opt).from(element).save();
   };
+
+  useEffect(() => {
+    const fetchProyeks = async () => {
+      try {
+        const response = await fetch("/api/proyek");
+        if (!response.ok) throw new Error("Gagal mengambil data proyek");
+        const data = await response.json();
+        setProyeks(data);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchProyeks();
+  }, []);
 
   const handleDelete = async (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus proyek ini?")) {

@@ -4,8 +4,8 @@ export default function Document() {
   return (
     <Html lang="en">
       <Head>
-        <title>SITARA</title>
-        <link rel="icon" href="/favicon/F1B.png" />
+        {/* <title>SITARA</title>
+        <link rel="icon" href="/favicon/F1B.png" /> */}
       </Head>
       <body className="antialiased bg-background">
         <Main />

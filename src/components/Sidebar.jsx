@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon } from "@iconify/react"; // ✅ Import Iconify
 
 const Sidebar = () => {
   const pathname = usePathname();
@@ -21,18 +22,6 @@ const Sidebar = () => {
         { type: "link", href: "/admin/berita/delete", label: "Hapus Berita" },
       ],
     },
-    {
-      title: "Laporan",
-      items: [
-        { type: "section", content: "Laporan" },
-        { type: "link", href: "/", label: "Semua Laporan" },
-        {
-          type: "link",
-          href: "/",
-          label: "Review Laporan",
-        },
-      ],
-    },
   ];
 
   const renderItem = (item) => {
@@ -41,7 +30,7 @@ const Sidebar = () => {
         return (
           <li
             key={item.content}
-            className="p-3 m-3 text-xl border border-white/15 rounded-xl"
+            className="p-3 m-3 text-xl border border-white/15 rounded-xl text-center"
           >
             {item.content}
           </li>
@@ -57,10 +46,10 @@ const Sidebar = () => {
         return (
           <li
             key={item.href}
-            className={`p-3 m-3 border rounded-xl ${
+            className={`p-3 m-3 border rounded-full ${
               isActive
-                ? "border-black/15 bg-gray-100"
-                : "border-white/15 hover:border-black/15"
+                ? "bg-blue-500 text-white"
+                : "border-white/15 hover:bg-blue-500 hover:text-white"
             }`}
           >
             <Link href={item.href}>{item.label}</Link>
@@ -72,25 +61,29 @@ const Sidebar = () => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 bottom-0 text-black w-[200px] overflow-scroll">
+    <nav className="fixed top-0 left-0 bottom-0 text-black w-[200px]">
       {menuItems.map((group, groupIndex) => (
         <ul key={groupIndex}>{group.items.map((item) => renderItem(item))}</ul>
       ))}
       <ul>
         <li className="p-3 m-3 mb border-b border-black/15 rounded-xl">
-          <p>Proyek</p>
+          <p className="mr-4">Proyek</p>
         </li>
-        <li className="p-3 m-3 mb rounded-xl">
-          <p>Semua Proyek (Locked)</p>
+        <li className="p-3 m-3 mb rounded-xl flex items-center justify-between">
+          <p className="mr-4">Semua Proyek</p>
+          <Icon icon="mdi:lock" width="20" height="20" />
         </li>
-        <li className="p-3 m-3 mb rounded-xl">
-          <p>Buat Proyek (Locked)</p>
+        <li className="p-3 m-3 mb rounded-xl flex items-center justify-between">
+          <p className="mr-4">Buat Proyek</p>
+          <Icon icon="mdi:lock" width="20" height="20" />
         </li>
-        <li className="p-3 m-3 mb rounded-xl">
-          <p>Ubah Proyek (Locked)</p>
+        <li className="p-3 m-3 mb rounded-xl flex items-center justify-between">
+          <p className="mr-4">Ubah Proyek</p>
+          <Icon icon="mdi:lock" width="20" height="20" />
         </li>
-        <li className="p-3 m-3 mb rounded-xl">
-          <p>Hapus Proyek (Locked)</p>
+        <li className="p-3 m-3 mb rounded-xl flex items-center justify-between">
+          <p className="mr-4">Hapus Proyek</p>
+          <Icon icon="mdi:lock" width="20" height="20" />
         </li>
       </ul>
     </nav>

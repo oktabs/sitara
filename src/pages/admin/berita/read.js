@@ -47,16 +47,16 @@ export default function LihatBeritaPage() {
     <div className="flex">
       <Sidebar />
       <main className="flex-1 p-6 ml-[256px] bg-gray-100 min-h-screen text-gray-800">
-        <div className="flex justify-between items-center mb-6">
+        <div className="ml-5 mr-5 flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold">Semua Berita</h1>
-          <Link href="/admin/berita/tambah">
-            <button className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+          <Link href="/admin/berita/create">
+            <button className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
               Tambah Berita Baru
             </button>
           </Link>
         </div>
 
-        <div className="overflow-x-auto bg-white rounded shadow">
+        <div className="overflow-x-auto bg-white rounded-3xl">
           <table className="w-full table-auto border-collapse">
             <thead>
               <tr className="bg-gray-200 text-left text-sm uppercase text-gray-600">

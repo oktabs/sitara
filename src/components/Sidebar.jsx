@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Icon } from "@iconify/react"; // ✅ Import Iconify
+import { Icon } from "@iconify/react";
 
 const Sidebar = () => {
   const pathname = usePathname();

@@ -56,12 +56,10 @@ export default function ProyekForm() {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    // Handle nested objects
     if (name.startsWith("detail_anggaran.")) {
       const [parent, child, grandchild] = name.split(".");
 
       if (grandchild) {
-        // For komponen_utama fields
         setFormData((prev) => ({
           ...prev,
           [parent]: {
@@ -73,7 +71,6 @@ export default function ProyekForm() {
           },
         }));
       } else {
-        // For other detail_anggaran fields
         setFormData((prev) => ({
           ...prev,
           [parent]: {
@@ -83,7 +80,6 @@ export default function ProyekForm() {
         }));
       }
     } else {
-      // For top level fields
       setFormData((prev) => ({
         ...prev,
         [name]: value,
@@ -102,9 +98,7 @@ export default function ProyekForm() {
 
       const response = await fetch(url, {
         method,
-        headers: {
-          "Content-Type": "application/json",
-        },
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
       });
 
@@ -113,7 +107,7 @@ export default function ProyekForm() {
         throw new Error(errorData.error || "Gagal menyimpan proyek");
       }
 
-      router.push("/admin/proyek");
+      router.push("/admin/proyek/read");
     } catch (err) {
       setError(err.message);
     } finally {
@@ -122,217 +116,138 @@ export default function ProyekForm() {
   };
 
   return (
-    <div className="text-black">
-      <h1>{isEditMode ? "Edit Proyek" : "Tambah Proyek Baru"}</h1>
-      <Link href="/admin/proyek">
-        <button>Kembali ke Daftar</button>
+    <div className="max-w-4xl mx-auto px-4 py-8 text-gray-900">
+      <h1 className="text-2xl font-semibold mb-4">
+        {isEditMode ? "Edit Proyek" : "Tambah Proyek Baru"}
+      </h1>
+
+      <Link href="/admin/proyek/read" className="inline-block mb-6 text-blue-600 hover:underline">
+        ← Kembali ke Daftar
       </Link>
 
-      {error && <div>Error: {error}</div>}
+      {error && <div className="mb-4 text-red-600">Error: {error}</div>}
 
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="space-y-6">
+        {[
+          { label: "URL Gambar", name: "url_gambar", type: "url", placeholder: "https://example.com/image.jpg" },
+          { label: "Nama Proyek*", name: "nama_proyek", type: "text", required: true },
+          { label: "Deskripsi", name: "deskripsi", isTextarea: true, rows: 4 },
+          { label: "Progress (%)", name: "progress", type: "number", min: 0, max: 100 },
+          { label: "Lokasi", name: "lokasi", type: "text" },
+          { label: "Tanggal Mulai", name: "tanggal_mulai", type: "date", value: formData.tanggal_mulai?.split("T")[0] || "" },
+          { label: "Tanggal Selesai", name: "tanggal_selesai", type: "date", value: formData.tanggal_selesai?.split("T")[0] || "" },
+        ].map(({ label, name, type, ...rest }) => (
+          <div key={name}>
+            <label className="block font-medium mb-1">{label}</label>
+            {rest.isTextarea ? (
+              <textarea
+                name={name}
+                value={formData[name]}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                {...rest}
+              />
+            ) : (
+              <input
+                name={name}
+                type={type || "text"}
+                value={rest.value ?? formData[name]}
+                onChange={handleChange}
+                className="w-full border rounded px-3 py-2"
+                {...rest}
+              />
+            )}
+          </div>
+        ))}
+
         <div>
-          <label>URL Gambar</label>
-          <input
-            type="url"
-            name="url_gambar"
-            value={formData.url_gambar}
+          <label className="block font-medium mb-1">Status</label>
+          <select
+            name="status"
+            value={formData.status}
             onChange={handleChange}
-            placeholder="https://example.com/image.jpg"
-          />
-        </div>
-
-        <div>
-          <label>Nama Proyek*</label>
-          <input
-            type="text"
-            name="nama_proyek"
-            value={formData.nama_proyek}
-            onChange={handleChange}
-            required
-          />
-        </div>
-
-        <div>
-          <label>Deskripsi</label>
-          <textarea
-            name="deskripsi"
-            value={formData.deskripsi}
-            onChange={handleChange}
-            rows={4}
-          />
-        </div>
-
-        <div>
-          <label>Progress (%)</label>
-          <input
-            type="number"
-            name="progress"
-            min="0"
-            max="100"
-            value={formData.progress}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label>Lokasi</label>
-          <input
-            type="text"
-            name="lokasi"
-            value={formData.lokasi}
-            onChange={handleChange}
-          />
-        </div>
-
-        <div>
-          <label>Status</label>
-          <select name="status" value={formData.status} onChange={handleChange}>
-            <option value="perencanaan">Perencanaan</option>
-            <option value="berjalan">Berjalan</option>
-            <option value="selesai">Selesai</option>
-            <option value="mangkrak">Mangkrak</option>
+            className="w-full border rounded px-3 py-2"
+          >
+            {["perencanaan", "berjalan", "selesai", "mangkrak"].map((s) => (
+              <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
+            ))}
           </select>
         </div>
 
-        <div>
-          <label>Tanggal Mulai</label>
-          <input
-            type="date"
-            name="tanggal_mulai"
-            value={formData.tanggal_mulai?.split("T")[0] || ""}
-            onChange={handleChange}
-          />
-        </div>
+        <h2 className="text-xl font-semibold mt-10 mb-2">Detail Anggaran</h2>
+
+        {[
+          { label: "Total Anggaran (Rp)", name: "detail_anggaran.total_anggaran" },
+          { label: "Anggaran Terpakai (Rp)", name: "detail_anggaran.anggaran_terpakai" },
+          { label: "Dokumen Anggaran (URL)", name: "detail_anggaran.dokumen_anggaran", type: "url", placeholder: "https://example.com/document.pdf" },
+        ].map(({ label, name, type, ...rest }) => (
+          <div key={name}>
+            <label className="block font-medium mb-1">{label}</label>
+            <input
+              type={type || "number"}
+              name={name}
+              value={name.split(".").reduce((acc, part) => acc[part], formData)}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2"
+              {...rest}
+            />
+          </div>
+        ))}
 
         <div>
-          <label>Tanggal Selesai</label>
-          <input
-            type="date"
-            name="tanggal_selesai"
-            value={formData.tanggal_selesai?.split("T")[0] || ""}
-            onChange={handleChange}
-          />
-        </div>
-
-        <h2>Detail Anggaran</h2>
-
-        <div>
-          <label>Total Anggaran (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.total_anggaran"
-            value={formData.detail_anggaran.total_anggaran}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label>Anggaran Terpakai (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.anggaran_terpakai"
-            value={formData.detail_anggaran.anggaran_terpakai}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label>Sumber Dana</label>
+          <label className="block font-medium mb-1">Sumber Dana</label>
           <select
             name="detail_anggaran.sumber_dana"
             value={formData.detail_anggaran.sumber_dana}
             onChange={handleChange}
+            className="w-full border rounded px-3 py-2"
           >
-            <option value="APBD">APBD</option>
-            <option value="APBN">APBN</option>
-            <option value="Dana Desa">Dana Desa</option>
-            <option value="CSR">CSR</option>
-            <option value="Lainnya">Lainnya</option>
+            {["APBD", "APBN", "Dana Desa", "CSR", "Lainnya"].map((s) => (
+              <option key={s} value={s}>{s}</option>
+            ))}
           </select>
         </div>
 
-        <div>
-          <label>Dokumen Anggaran (URL)</label>
-          <input
-            type="url"
-            name="detail_anggaran.dokumen_anggaran"
-            value={formData.detail_anggaran.dokumen_anggaran}
-            onChange={handleChange}
-            placeholder="https://example.com/document.pdf"
-          />
-        </div>
+        <h3 className="text-lg font-semibold mt-8 mb-2">Komponen Utama Anggaran</h3>
 
-        <h3>Komponen Utama Anggaran</h3>
-
-        <div>
-          <label>Material (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.komponen_utama.material"
-            value={formData.detail_anggaran.komponen_utama.material}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label>Tenaga Kerja (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.komponen_utama.tenaga_kerja"
-            value={formData.detail_anggaran.komponen_utama.tenaga_kerja}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
+        {[
+          "material",
+          "tenaga_kerja",
+          "peralatan",
+          "administrasi",
+          "lain_lain",
+        ].map((key) => (
+          <div key={key}>
+            <label className="block font-medium mb-1">
+              {key.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())} (Rp)
+            </label>
+            <input
+              type="number"
+              name={`detail_anggaran.komponen_utama.${key}`}
+              value={formData.detail_anggaran.komponen_utama[key]}
+              onChange={handleChange}
+              className="w-full border rounded px-3 py-2"
+              min="0"
+            />
+          </div>
+        ))}
 
         <div>
-          <label>Peralatan (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.komponen_utama.peralatan"
-            value={formData.detail_anggaran.komponen_utama.peralatan}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label>Administrasi (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.komponen_utama.administrasi"
-            value={formData.detail_anggaran.komponen_utama.administrasi}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label>Lain-lain (Rp)</label>
-          <input
-            type="number"
-            name="detail_anggaran.komponen_utama.lain_lain"
-            value={formData.detail_anggaran.komponen_utama.lain_lain}
-            onChange={handleChange}
-            min="0"
-          />
-        </div>
-
-        <div>
-          <label>Tahun Anggaran</label>
+          <label className="block font-medium mb-1">Tahun Anggaran</label>
           <input
             type="text"
             name="detail_anggaran.tahun_anggaran"
             value={formData.detail_anggaran.tahun_anggaran}
             onChange={handleChange}
+            className="w-full border rounded px-3 py-2"
           />
         </div>
 
-        <button type="submit" disabled={loading}>
+        <button
+          type="submit"
+          disabled={loading}
+          className="mt-6 bg-blue-600 text-white px-6 py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+        >
           {loading ? "Menyimpan..." : "Simpan"}
         </button>
       </form>

@@ -1,5 +1,6 @@
 // src/pages/admin/proyek/create.js
 import { useState } from "react";
+import { useEffect } from "react";
 import { useRouter } from "next/router";
 import KontraktorSidebar from "@/components/KontraktorSidebar";
 
@@ -66,6 +67,15 @@ export default function CreateProyek() {
       }));
     }
   };
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/auth/login");
+    } else {
+      console.log("Token Tersedia!");
+    }
+  }, []);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

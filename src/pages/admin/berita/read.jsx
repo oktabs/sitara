@@ -1,13 +1,23 @@
 // src/pages/admin/berita/index.js
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import Link from "next/link";
 import Sidebar from "@/components/Sidebar";
 
-export default function UbahBeritaPage() {
+export default function LihatBeritaPage() {
   const [beritas, setBeritas] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const router = useRouter();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/auth/login");
+    } else {
+      console.log("Token Tersedia!");
+    }
+  }, []);
   useEffect(() => {
     const fetchBeritas = async () => {
       try {
@@ -48,8 +58,8 @@ export default function UbahBeritaPage() {
       <Sidebar />
       <main className="flex-1 p-6 ml-[256px] bg-gray-100 min-h-screen text-gray-800">
         <div className="ml-5 mr-5 flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold">Ubah Berita</h1>
-          <Link href="/admin/berita/tambah">
+          <h1 className="text-2xl font-bold">Semua Berita</h1>
+          <Link href="/admin/berita/create">
             <button className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition">
               Tambah Berita Baru
             </button>
@@ -62,7 +72,7 @@ export default function UbahBeritaPage() {
               <tr className="bg-gray-200 text-left text-sm uppercase text-gray-600">
                 <th className="px-4 py-3">Judul</th>
                 <th className="px-4 py-3">Tanggal Dibuat</th>
-                <th className="px-4 py-3">Aksi</th>
+                {/* <th className="px-4 py-3">Aksi</th> */}
               </tr>
             </thead>
             <tbody>
@@ -72,19 +82,19 @@ export default function UbahBeritaPage() {
                   <td className="px-4 py-2">
                     {new Date(berita.tanggal_dibuat).toLocaleDateString()}
                   </td>
-                  <td className="px-4 py-2 space-x-2">
+                  {/* <td className="px-4 py-2 space-x-2">
                     <Link href={`/admin/berita/${berita._id}`}>
-                      <button className="px-3 py-1 bg-yellow-400 text-white rounded-full hover:bg-yellow-500 transition">
+                      <button className="px-3 py-1 bg-yellow-400 text-white rounded hover:bg-yellow-500 transition">
                         Edit
                       </button>
                     </Link>
-                    {/* <button
+                    <button
                       onClick={() => handleDelete(berita._id)}
                       className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition"
                     >
                       Hapus
-                    </button> */}
-                  </td>
+                    </button>
+                  </td> */}
                 </tr>
               ))}
             </tbody>

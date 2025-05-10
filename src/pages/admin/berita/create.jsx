@@ -1,10 +1,21 @@
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
+import { useEffect } from "react";
 import Sidebar from "@/components/Sidebar";
 
 export default function TambahBeritaPage() {
   const router = useRouter();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/auth/login");
+    } else {
+      console.log("Token Tersedia!");
+    }
+  }, []);
+
   const [formData, setFormData] = useState({
     judul: "",
     isi: "",

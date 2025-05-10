@@ -28,6 +28,32 @@ export default function ProyekRead() {
     fetchProyeks();
   }, []);
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/auth/login");
+    } else {
+      console.log("Token Tersedia!");
+    }
+  }, []);
+
+  const exportToPDF = () => {
+    if (typeof window === "undefined") return;
+
+    const html2pdf = require("html2pdf.js");
+    const element = document.getElementById("pdf-content");
+
+    const opt = {
+      margin: 0.5,
+      filename: `${selectedProyek.nama_proyek.replace(/\s+/g, "_")}_Anggaran.pdf`,
+      image: { type: "jpeg", quality: 0.98 },
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" }
+    };
+
+    html2pdf().set(opt).from(element).save();
+  };
+
   const handleDelete = async (id) => {
     if (confirm("Apakah Anda yakin ingin menghapus proyek ini?")) {
       try {
@@ -76,7 +102,7 @@ export default function ProyekRead() {
       <KontraktorSidebar />
       <div className="ml-[256px] w-full px-6 py-8">
         <div className="mb-5 ml-5 mr-5 flex justify-between items-center">
-          <h2 className="text-2xl font-bold text-gray-800">Daftar Proyek</h2>
+          <h2 className="text-2xl font-bold text-gray-800">Daftar Proyek & RAB</h2>
           <Link
             className="px-6 py-3 bg-blue-500 text-white rounded-full shadow-lg hover:bg-blue-600 transition"
             href="/admin/proyek/create"
@@ -140,21 +166,6 @@ export default function ProyekRead() {
                     Lihat Detail Anggaran
                   </button>
                 </div>
-
-                {/* <div className="flex justify-between mt-6">
-                  <Link
-                    href={`/admin/proyek/${proyek._id}`}
-                    className="px-4 py-2 bg-green-500 text-white rounded-full hover:bg-green-600 transition"
-                  >
-                    Edit
-                  </Link>
-                  <button
-                    onClick={() => handleDelete(proyek._id)}
-                    className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
-                  >
-                    Hapus
-                  </button>
-                </div> */}
               </div>
             </div>
           ))}
@@ -162,58 +173,71 @@ export default function ProyekRead() {
 
         {/* Modal */}
         {isModalOpen && selectedProyek && (
-          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-            <div className="bg-white rounded-3xl shadow-lg p-6 w-3/4 md:w-1/2">
-              <h3 className="text-xl text-black font-semibold mb-4">Detail Anggaran: {selectedProyek.nama_proyek}</h3>
+          <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50">
+            <div className="bg-white rounded-3xl shadow-lg p-6 w-3/4 md:w-1/2 relative">
+              <div id="pdf-content">
+                <h3 className="text-xl text-black font-semibold mb-4">
+                  Detail Anggaran: {selectedProyek.nama_proyek}
+                </h3>
 
-              <div>
-                <h4 className="font-semibold text-black/75">Komponen Anggaran</h4>
-                <ul className="text-black/75">
-                  <li>Material: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.material)}</li>
-                  <li>Tenaga Kerja: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.tenaga_kerja)}</li>
-                  <li>Peralatan: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.peralatan)}</li>
-                  <li>Administrasi: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.administrasi)}</li>
-                  <li>Lain-lain: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.lain_lain)}</li>
-                </ul>
+                <div>
+                  <h4 className="font-semibold text-black/75">Komponen Anggaran</h4>
+                  <ul className="text-black/75">
+                    <li>Material: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.material)}</li>
+                    <li>Tenaga Kerja: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.tenaga_kerja)}</li>
+                    <li>Peralatan: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.peralatan)}</li>
+                    <li>Administrasi: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.administrasi)}</li>
+                    <li>Lain-lain: {formatCurrency(selectedProyek.detail_anggaran.komponen_utama.lain_lain)}</li>
+                  </ul>
 
-                <div className="mt-4">
-                  <div className="flex justify-between text-black/75">
-                    <span>Total Anggaran</span>
-                    <span>{formatCurrency(selectedProyek.detail_anggaran.total_anggaran)}</span>
+                  <div className="mt-4">
+                    <div className="flex justify-between text-black/75">
+                      <span>Total Anggaran</span>
+                      <span>{formatCurrency(selectedProyek.detail_anggaran.total_anggaran)}</span>
+                    </div>
+                    <div className="flex justify-between text-black/75 mt-2">
+                      <span>Anggaran Terpakai</span>
+                      <span>{formatCurrency(selectedProyek.detail_anggaran.anggaran_terpakai)}</span>
+                    </div>
+                    <div className="flex justify-between text-black/75 mt-2">
+                      <span>Sisa Anggaran</span>
+                      <span>{formatCurrency(selectedProyek.detail_anggaran.sisa_anggaran)}</span>
+                    </div>
+                    <div className="flex justify-between text-black/75 mt-2">
+                      <span>Persentase Terpakai</span>
+                      <span>{selectedProyek.detail_anggaran.persentase_terpakai}%</span>
+                    </div>
                   </div>
-                  <div className="flex justify-between text-black/75 mt-2">
-                    <span>Anggaran Terpakai</span>
-                    <span>{formatCurrency(selectedProyek.detail_anggaran.anggaran_terpakai)}</span>
+
+                  <div className="mt-4">
+                    <h4 className="text-black/75 font-semibold">Sumber Dana</h4>
+                    <p className="text-black/75">{selectedProyek.detail_anggaran.sumber_dana}</p>
                   </div>
-                  <div className="flex justify-between text-black/75 mt-2">
-                    <span>Sisa Anggaran</span>
-                    <span>{formatCurrency(selectedProyek.detail_anggaran.sisa_anggaran)}</span>
-                  </div>
-                  <div className="flex justify-between text-black/75 mt-2">
-                    <span>Persentase Terpakai</span>
-                    <span>{selectedProyek.detail_anggaran.persentase_terpakai}%</span>
+
+                  <div className="mt-4">
+                    <h4 className="text-black/75 font-semibold">Dokumen Anggaran</h4>
+                    <a
+                      href={selectedProyek.detail_anggaran.dokumen_anggaran}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-500 hover:underline"
+                    >
+                      Lihat Dokumen
+                    </a>
                   </div>
                 </div>
+              </div>
 
-                <div className="mt-4">
-                  <h4 className="text-black/75 font-semibold">Sumber Dana</h4>
-                  <p className="text-black/75">{selectedProyek.detail_anggaran.sumber_dana}</p>
-                </div>
-
-                <div className="mt-4">
-                  <h4 className="text-black/75 font-semibold">Dokumen Anggaran</h4>
-                  <a
-                    href={selectedProyek.detail_anggaran.dokumen_anggaran}
-                    target="_blank"
-                    className="text-blue-500 hover:underline"
-                  >
-                    Lihat Dokumen
-                  </a>
-                </div>
-
+              <div className="flex justify-end gap-3 mt-6">
+                <button
+                  onClick={exportToPDF}
+                  className="px-4 py-2 bg-green-600 text-white rounded-full hover:bg-green-700 transition"
+                >
+                  Export ke PDF
+                </button>
                 <button
                   onClick={closeModal}
-                  className="mt-6 px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+                  className="px-4 py-2 bg-red-500 text-white rounded-full hover:bg-red-600 transition"
                 >
                   Tutup
                 </button>

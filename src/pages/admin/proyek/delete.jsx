@@ -12,6 +12,15 @@ export default function ProyekDelete() {
   const router = useRouter();
 
   useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      router.replace("/auth/login");
+    } else {
+      console.log("Token Tersedia!");
+    }
+  }, []);
+
+  useEffect(() => {
     const fetchProyeks = async () => {
       try {
         const response = await fetch("/api/proyek");

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-// import { TabLogin } from "@/components/global/TabLogin";
+import { jwtDecode } from "jwt-decode";
 import Link from "next/link";
 
 const AdminLoginPage = () => {
@@ -12,14 +12,27 @@ const AdminLoginPage = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
+
     try {
       const response = await axios.post("/api/auth/login", {
         email,
         password,
       });
 
-      localStorage.setItem("token", response.data.token);
-      router.push("/role/admin");
+      const token = response.data.token;
+      localStorage.setItem("token", token);
+
+      const decoded = jwtDecode(token);
+
+      if (decoded.role === "admin_kecamatan") {
+        router.push("/admin/berita/read");
+      } else if (decoded.role === "kontraktor_desa") {
+        router.push("/admin/proyek/read");
+      } else {
+        setError("Role tidak diizinkan mengakses dashboard ini.");
+        localStorage.removeItem("token");
+      }
     } catch (error) {
       setError("Email atau password salah, atau terjadi kesalahan server.");
     }
@@ -28,7 +41,6 @@ const AdminLoginPage = () => {
   return (
     <div className="min-h-screen bg-gray-100 flex items-center justify-center px-4">
       <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        {/* <TabLogin /> */}
         <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
           Login Sebagai Admin
         </h2>
@@ -41,10 +53,7 @@ const AdminLoginPage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            <label
-              htmlFor="email"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
               Email
             </label>
             <input
@@ -53,16 +62,13 @@ const AdminLoginPage = () => {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 text-black py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="admin@example.com"
             />
           </div>
 
           <div>
-            <label
-              htmlFor="password"
-              className="block text-sm font-medium text-gray-700 mb-1"
-            >
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1">
               Password
             </label>
             <input
@@ -71,7 +77,7 @@ const AdminLoginPage = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full px-4 text-black py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               placeholder="••••••••"
             />
           </div>

@@ -1,11 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Icon } from "@iconify/react";
 
 const Sidebar = () => {
   const pathname = usePathname();
+  const router = useRouter();
 
   const menuItems = [
     {
@@ -30,7 +31,7 @@ const Sidebar = () => {
         return (
           <li
             key={item.content}
-            className="p-3 m-3 text-xl border border-white/15 rounded-xl text-center"
+            className="p-3 m-3 text-xl border border-white/15 rounded-xl text-start"
           >
             {item.content}
           </li>
@@ -60,6 +61,14 @@ const Sidebar = () => {
     }
   };
 
+  const handleLogout = () => {
+    // Hapus token dari localStorage
+    localStorage.removeItem("token");
+
+    // Arahkan pengguna ke halaman login
+    router.replace("/auth/login");
+  };
+
   return (
     <nav className="fixed top-0 left-0 bottom-0 text-black w-[200px]">
       {menuItems.map((group, groupIndex) => (
@@ -86,6 +95,14 @@ const Sidebar = () => {
           <Icon icon="mdi:lock" width="20" height="20" />
         </li>
       </ul>
+
+      {/* Tombol logout */}
+      <button
+        onClick={handleLogout}
+        className="p-3 m-3 mt-6 w-full bg-red-500 text-white rounded-full hover:bg-red-600 transition"
+      >
+        Logout
+      </button>
     </nav>
   );
 };

@@ -12,7 +12,7 @@ const ProjectSchema = new mongoose.Schema({
   location: LocationSchema,
   contractor: ContractorSchema,
   startDate: Date,
-  endDate: Date,
+  endDate: Date, 
   budget: BudgetSchema,
   progress: [ProgressSchema],
   status: {

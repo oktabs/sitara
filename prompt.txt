@@ -1,7 +1,19 @@
-Pelajari kode ini:
 // .env.local
 MONGODB_URI=mongodb+srv://toktabella:Nc8eXGYuSS9vi7Y5@cluster0.vk6ainq.mongodb.net/sitara?retryWrites=true&w=majority&appName=Cluster0
 JWT_SECRET=4f8cdd5b2a9fef2a5b0d1a6c9f3e7a1d2b5c8e4f0a6d3b9f7c0e1a2d8b4c6e3
+
+// src/middleware.js
+export default function initMiddleware(middleware) {
+  return (req, res) =>
+    new Promise((resolve, reject) => {
+      middleware(req, res, (result) => {
+        if (result instanceof Error) {
+          return reject(result);
+        }
+        return resolve(result);
+      });
+    });
+}
 
 // src/lib/mongodb.js
 import mongoose from "mongoose";
@@ -30,6 +42,31 @@ export default connectDB;
 
 // src/models/Budget.js
 import mongoose from 'mongoose';
+import ItemSchema from './Item.js';
+
+const BudgetSchema = new mongoose.Schema({
+  fiscalYear: Number,
+  fundingSource: { type: String, enum: ['APBD', 'Village Fund', 'Provincial Assistance'] },
+  items: [ItemSchema],
+  totalBudget: Number,
+});
+
+export default BudgetSchema;
+
+// src/models/Contractor.js
+import mongoose from 'mongoose';
+
+const ContractorSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  contact: String,
+  address: String,
+  taxIdNumber: String, // npwp
+});
+
+export default ContractorSchema;
+
+// src/models/Item.js
+import mongoose from 'mongoose';
 
 const ItemSchema = new mongoose.Schema({
   description: String,
@@ -39,71 +76,70 @@ const ItemSchema = new mongoose.Schema({
   total: Number,
 });
 
-const BudgetSchema = new mongoose.Schema({
-  tahunAnggaran: Number,
-  sumberDana: { type: String, enum: ['APBD', 'Dana Desa', 'Bantuan Provinsi'] },
-  items: [ItemSchema],
-  totalAnggaran: Number,
-});
-
-export default mongoose.models.Budget || mongoose.model('Budget', BudgetSchema);
-
-// src/models/Contractor.js
-import mongoose from 'mongoose';
-
-const ContractorSchema = new mongoose.Schema({
-  name: { type: String, required: true },
-  contact: String,
-  alamat: String,
-  npwp: String,
-});
-
-export default mongoose.models.Contractor || mongoose.model('Contractor', ContractorSchema);
+export default ItemSchema;
 
 // src/models/Location.js
 import mongoose from 'mongoose';
 
 const LocationSchema = new mongoose.Schema({
-  kecamatan: { type: String, required: true },
-  desa: { type: String, required: true },
-  alamat: String,
-  koordinat: {
+  district: { type: String, required: true },  
+  village: { type: String, required: true },   
+  address: String,
+  coordinates: {
     lat: Number,
     lng: Number,
   },
 });
 
-export default mongoose.models.Location || mongoose.model('Location', LocationSchema);
+export default LocationSchema;
+
+// src/models/News.js
+import mongoose from 'mongoose';
+
+const NewsSchema = new mongoose.Schema({
+  title: { type: String, required: true, maxlength: 255 },
+  content: { type: String, required: true },
+  createdAt: { type: Date, default: Date.now },
+  photo: { type: String },
+});
+
+export default NewsSchema;
 
 // src/models/Progress.js
 import mongoose from 'mongoose';
 
 const ProgressSchema = new mongoose.Schema({
-  tanggal: { type: Date, default: Date.now },
-  persentase: { type: Number, min: 0, max: 100 },
-  keterangan: String,
-  fotoDokumentasi: [String],
+  date: { type: Date, default: Date.now },
+  percentage: { type: Number, min: 0, max: 100 },
+  notes: String,
+  photoDocumentation: [String],
 });
 
-export default mongoose.models.Progress || mongoose.model('Progress', ProgressSchema);
+export default ProgressSchema;
 
 // src/models/Project.js
 import mongoose from 'mongoose';
+import LocationSchema from './Location';
+import ContractorSchema from './Contractor';
+import BudgetSchema from './Budget';
+import ProgressSchema from './Progress';
+import NewsSchema from './News';
 
 const ProjectSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: String,
-  location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
-  contractor: { type: mongoose.Schema.Types.ObjectId, ref: 'Contractor' },
+  location: LocationSchema,
+  contractor: ContractorSchema,
   startDate: Date,
   endDate: Date,
-  budget: { type: mongoose.Schema.Types.ObjectId, ref: 'Budget' },
-  progress: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Progress' }],
+  budget: BudgetSchema,
+  progress: [ProgressSchema],
   status: {
     type: String,
-    enum: ['perencanaan', 'berjalan', 'selesai', 'terlambat'],
-    default: 'perencanaan',
+    enum: ['planning', 'in_progress', 'completed', 'delayed'],
+    default: 'planning',
   },
+  news: [NewsSchema],
 }, { timestamps: true });
 
 export default mongoose.models.Project || mongoose.model('Project', ProjectSchema);

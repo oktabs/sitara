@@ -2,8 +2,8 @@
 import mongoose from 'mongoose';
 
 const LocationSchema = new mongoose.Schema({
-  district: { type: String, required: true },  // kecamatan
-  village: { type: String, required: true },   // desa
+  district: { type: String, required: true },  
+  village: { type: String, required: true },   
   address: String,
   coordinates: {
     lat: Number,

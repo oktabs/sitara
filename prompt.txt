@@ -1,0 +1,109 @@
+Pelajari kode ini:
+// .env.local
+MONGODB_URI=mongodb+srv://toktabella:Nc8eXGYuSS9vi7Y5@cluster0.vk6ainq.mongodb.net/sitara?retryWrites=true&w=majority&appName=Cluster0
+JWT_SECRET=4f8cdd5b2a9fef2a5b0d1a6c9f3e7a1d2b5c8e4f0a6d3b9f7c0e1a2d8b4c6e3
+
+// src/lib/mongodb.js
+import mongoose from "mongoose";
+
+const MONGODB_URI = process.env.MONGODB_URI;
+
+if (!MONGODB_URI) {
+  throw new Error("Harap setel MONGODB_URI di .env.local");
+}
+
+const connectDB = async () => {
+  if (mongoose.connection.readyState >= 1) return;
+
+  try {
+    await mongoose.connect(MONGODB_URI, {
+      useNewUrlParser: true,
+      useUnifiedTopology: true,
+    });
+    console.log("MongoDB Connected");
+  } catch (error) {
+    console.error("MongoDB Connection Error:", error);
+  }
+};
+
+export default connectDB;
+
+// src/models/Budget.js
+import mongoose from 'mongoose';
+
+const ItemSchema = new mongoose.Schema({
+  description: String,
+  volume: Number,
+  unit: String,
+  unitPrice: Number,
+  total: Number,
+});
+
+const BudgetSchema = new mongoose.Schema({
+  tahunAnggaran: Number,
+  sumberDana: { type: String, enum: ['APBD', 'Dana Desa', 'Bantuan Provinsi'] },
+  items: [ItemSchema],
+  totalAnggaran: Number,
+});
+
+export default mongoose.models.Budget || mongoose.model('Budget', BudgetSchema);
+
+// src/models/Contractor.js
+import mongoose from 'mongoose';
+
+const ContractorSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  contact: String,
+  alamat: String,
+  npwp: String,
+});
+
+export default mongoose.models.Contractor || mongoose.model('Contractor', ContractorSchema);
+
+// src/models/Location.js
+import mongoose from 'mongoose';
+
+const LocationSchema = new mongoose.Schema({
+  kecamatan: { type: String, required: true },
+  desa: { type: String, required: true },
+  alamat: String,
+  koordinat: {
+    lat: Number,
+    lng: Number,
+  },
+});
+
+export default mongoose.models.Location || mongoose.model('Location', LocationSchema);
+
+// src/models/Progress.js
+import mongoose from 'mongoose';
+
+const ProgressSchema = new mongoose.Schema({
+  tanggal: { type: Date, default: Date.now },
+  persentase: { type: Number, min: 0, max: 100 },
+  keterangan: String,
+  fotoDokumentasi: [String],
+});
+
+export default mongoose.models.Progress || mongoose.model('Progress', ProgressSchema);
+
+// src/models/Project.js
+import mongoose from 'mongoose';
+
+const ProjectSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  description: String,
+  location: { type: mongoose.Schema.Types.ObjectId, ref: 'Location' },
+  contractor: { type: mongoose.Schema.Types.ObjectId, ref: 'Contractor' },
+  startDate: Date,
+  endDate: Date,
+  budget: { type: mongoose.Schema.Types.ObjectId, ref: 'Budget' },
+  progress: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Progress' }],
+  status: {
+    type: String,
+    enum: ['perencanaan', 'berjalan', 'selesai', 'terlambat'],
+    default: 'perencanaan',
+  },
+}, { timestamps: true });
+
+export default mongoose.models.Project || mongoose.model('Project', ProjectSchema);

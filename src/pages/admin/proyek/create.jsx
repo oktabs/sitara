@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { useEffect } from "react";
 import { useRouter } from "next/router";
-import KontraktorSidebar from "@/components/KontraktorSidebar";
+import KontraktorSidebar from "@/components/NavbarKontraktor";
 
 export default function CreateProyek() {
   const router = useRouter();

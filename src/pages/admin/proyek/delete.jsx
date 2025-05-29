@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import KontraktorSidebar from "@/components/KontraktorSidebar";
+import KontraktorSidebar from "@/components/NavbarKontraktor";
 
 export default function ProyekDelete() {
   const [proyeks, setProyeks] = useState([]);

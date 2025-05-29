@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Icon } from "@iconify/react";
 
 const menuItems = [
-  { title: "Berita", href: "/", icon: "mdi:newspaper" },
+  { title: "Berita", href: "/berita", icon: "mdi:newspaper" },
   { title: "Proyek", href: "/proyek", icon: "mdi:hammer-wrench" },
   { title: "Budget", href: "/budget", icon: "mdi:currency-usd" },
   { title: "Progress", href: "/progress", icon: "mdi:progress-check" },
@@ -12,7 +12,7 @@ const menuItems = [
   { title: "Kontraktor", href: "/kontraktor", icon: "mdi:account-tie" },
 ];
 
-const HamburgerMenu = () => {
+const NavbarKontraktor = () => {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
 
@@ -68,4 +68,4 @@ const HamburgerMenu = () => {
   );
 };
 
-export default HamburgerMenu;
+export default NavbarKontraktor;

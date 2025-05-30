@@ -1,3 +1,4 @@
+// pages/projects/index.jsx
 import { useState } from "react";
 import { useRouter } from "next/router";
 import Navbar from "@/components/Navbar";
@@ -58,7 +59,7 @@ export default function NewProjectForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const res = await fetch("http://localhost:3000/api/projects", {
+    const res = await fetch("/api/projects", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

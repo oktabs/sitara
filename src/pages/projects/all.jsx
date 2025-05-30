@@ -1,3 +1,4 @@
+// src/pages/projects/all.jsx
 import jsPDF from "jspdf";
 import { useState, useEffect } from "react";
 import Navbar from "@/components/Navbar";

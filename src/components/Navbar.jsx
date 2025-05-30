@@ -4,6 +4,7 @@ import { useRouter } from "next/router";
 import { Icon } from "@iconify/react";
 
 const menuItems = [
+  { title: "Home", href: "/", icon: "mdi:home" },
   { title: "Projects", href: "/projects", icon: "mdi:hammer-wrench" },
   {
     title: "All Projects",
@@ -12,7 +13,7 @@ const menuItems = [
   },
   { title: "Budget", href: "/budget", icon: "mdi:currency-usd" },
   { title: "Progress", href: "/progress", icon: "mdi:progress-check" },
-  { title: "News", href: "/", icon: "mdi:newspaper" },
+  { title: "News", href: "/news", icon: "mdi:newspaper" },
 ];
 
 const Navbar = () => {

@@ -80,11 +80,11 @@ const AllProject = () => {
   };
 
   return (
-    <>
+    <div className="bg-gray-100">
       <Navbar />
-      <div className="mt-10 w-full max-w-6xl mx-auto p-6 text-black/80">
+      <div className="pt-32 w-full max-w-6xl mx-auto p-6 bg-gray-100 text-black/80">
         <h2 className="text-2xl font-bold mb-6 text-center">
-          Daftar Proyek Lengkap
+          Daftar Proyek Lengkap & RAB
         </h2>
 
         {/* Search and Filter Controls */}
@@ -134,7 +134,7 @@ const AllProject = () => {
             {filteredProjects.map((project) => (
               <div
                 key={project._id}
-                className="bg-white rounded-2xl shadow-lg p-6 space-y-4"
+                className="bg-white rounded-3xl p-6 space-y-4"
               >
                 <div>
                   <h3 className="text-2xl font-bold mb-2">{project.name}</h3>
@@ -280,7 +280,7 @@ const AllProject = () => {
 
                 <button
                   onClick={() => exportToPDF(project)}
-                  className="mt-4 bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded"
+                  className="mt-4 bg-gray-800 hover:bg-blue-700 text-white font-semibold py-4 px-8 rounded-full"
                 >
                   Export to PDF
                 </button>
@@ -289,7 +289,7 @@ const AllProject = () => {
           </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

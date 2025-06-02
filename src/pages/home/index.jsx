@@ -1,8 +1,8 @@
 import Head from "next/head";
 import { motion } from "framer-motion";
-import Navbar from "../components/Navbar";
+import Navbar from "@/components/Navbar";
 
-const BerandaPage = () => {
+const HomePage = () => {
   return (
     <>
       <Head>
@@ -89,7 +89,7 @@ const BerandaPage = () => {
         </section>
 
         {/* Fitur Utama */}
-        {/* <section className="container mx-auto px-6 py-12">
+        <section className="container mx-auto px-6 py-12">
           <h2 className="text-4xl font-bold text-gray-800 text-center mb-10">
             Fitur Utama
           </h2>
@@ -116,10 +116,10 @@ const BerandaPage = () => {
               </motion.div>
             ))}
           </div>
-        </section> */}
+        </section>
 
         {/* CTA Section */}
-        {/* <section className="bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center py-16">
+        <section className="bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center py-16">
           <motion.h2
             className="text-4xl font-bold"
             initial={{ opacity: 0 }}
@@ -138,10 +138,10 @@ const BerandaPage = () => {
           >
             Daftar Sekarang
           </motion.a>
-        </section> */}
+        </section>
 
         {/* Footer */}
-        {/* <footer className="bg-blue-900 text-white text-center py-10 px-6">
+        <footer className="bg-blue-900 text-white text-center py-10 px-6">
           <div className="container mx-auto grid md:grid-cols-3 gap-8 text-left">
             <div>
               <h3 className="text-2xl font-bold">SITARA</h3>
@@ -204,23 +204,10 @@ const BerandaPage = () => {
               © 2024 SITARA. Semua Hak Dilindungi.
             </p>
           </div>
-        </footer> */}
+        </footer>
       </div>
     </>
   );
 };
 
-export default BerandaPage;
-
-// import HamburgerMenu from "@/components/Navbar";
-// import React from "react";
-
-// const HomePage = () => {
-//   return (
-//     <div>
-//       <HamburgerMenu />
-//     </div>
-//   )
-// }
-
-// export default HomePage;
+export default HomePage;

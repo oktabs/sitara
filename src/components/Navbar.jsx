@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { Icon } from "@iconify/react";
 
 const menuItems = [
-  { title: "Home", href: "/", icon: "mdi:home" },
+  { title: "Home", href: "/home", icon: "mdi:home" },
   { title: "Projects", href: "/projects/add", icon: "mdi:hammer-wrench" },
   {
     title: "All Projects",

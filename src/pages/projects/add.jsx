@@ -88,7 +88,7 @@ export default function NewProjectForm() {
       <div className="pt-32 px-4 flex justify-center">
         <form
           onSubmit={handleSubmit}
-          className="bg-white p-10 rounded-3xl w-full max-w-6xl"
+          className="bg-gray-100 p-10 rounded-3xl w-full max-w-6xl"
         >
           <h1 className="text-3xl font-bold text-center mb-10 text-gray-800">
             Tambah Proyek Baru
@@ -96,139 +96,228 @@ export default function NewProjectForm() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
             {/* LEFT COLUMN */}
-            <div className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">
-                  Nama Proyek
-                </label>
-                <input
-                  name="name"
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-              </div>
-
-              <div>
-                <label className="block text-sm font-semibold text-gray-700">
-                  Deskripsi
-                </label>
-                <textarea
-                  name="description"
-                  onChange={handleChange}
-                  className="w-full p-3 border border-gray-300 rounded-3xl resize-none h-24 focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-              </div>
-
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                  Lokasi
+            <div className="space-y-8">
+              {/* Basic Information Section */}
+              <div className="bg-gray-50 p-6 rounded-2xl">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                  Informasi Dasar Proyek
                 </h2>
-                <div className="space-y-3">
-                  <input
-                    name="location.province"
-                    placeholder="Provinsi"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="location.district"
-                    placeholder="Kabupaten"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="location.village"
-                    placeholder="Desa"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="location.coordinates.lat"
-                    placeholder="Latitude"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="location.coordinates.lng"
-                    placeholder="Longitude"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nama Proyek*
+                    </label>
+                    <input
+                      name="name"
+                      onChange={handleChange}
+                      placeholder="Contoh: Pembangunan Jalan Desa XYZ"
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Deskripsi Proyek*
+                    </label>
+                    <textarea
+                      name="description"
+                      onChange={handleChange}
+                      placeholder="Jelaskan detail proyek, tujuan, dan manfaatnya..."
+                      className="w-full p-3 border border-gray-300 rounded-xl resize-none h-32 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Location Section */}
+              <div className="bg-gray-50 p-6 rounded-2xl">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                  Lokasi Proyek
+                </h2>
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Provinsi*
+                    </label>
+                    <input
+                      name="location.province"
+                      placeholder="Contoh: Jawa Barat"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Kabupaten/Kota*
+                    </label>
+                    <input
+                      name="location.district"
+                      placeholder="Contoh: Kabupaten Bandung"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Desa/Kelurahan*
+                    </label>
+                    <input
+                      name="location.village"
+                      placeholder="Contoh: Desa Mekarwangi"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Latitude*
+                      </label>
+                      <input
+                        name="location.coordinates.lat"
+                        placeholder="Contoh: -6.914744"
+                        onChange={handleChange}
+                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Longitude*
+                      </label>
+                      <input
+                        name="location.coordinates.lng"
+                        placeholder="Contoh: 107.609810"
+                        onChange={handleChange}
+                        className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                        required
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* RIGHT COLUMN */}
-            <div className="space-y-5">
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                  Kontraktor
+            <div className="space-y-8">
+              {/* Contractor Section */}
+              <div className="bg-gray-50 p-6 rounded-2xl">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                  Informasi Kontraktor
                 </h2>
-                <div className="space-y-3">
-                  <input
-                    name="contractor.name"
-                    placeholder="Nama Kontraktor"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="contractor.address"
-                    placeholder="Alamat"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="contractor.contact"
-                    placeholder="Kontak"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Nama Kontraktor*
+                    </label>
+                    <input
+                      name="contractor.name"
+                      placeholder="Contoh: PT Bangun Jaya Abadi"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Alamat Kontraktor
+                    </label>
+                    <input
+                      name="contractor.address"
+                      placeholder="Contoh: Jl. Merdeka No. 123, Jakarta"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Kontak*
+                    </label>
+                    <input
+                      name="contractor.contact"
+                      placeholder="Contoh: 08123456789 atau email@kontraktor.com"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                  Tanggal
+              {/* Timeline Section */}
+              <div className="bg-gray-50 p-6 rounded-2xl">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                  Timeline Proyek
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    type="date"
-                    name="startDate"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    type="date"
-                    name="endDate"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tanggal Mulai*
+                    </label>
+                    <input
+                      type="date"
+                      name="startDate"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tanggal Selesai*
+                    </label>
+                    <input
+                      type="date"
+                      name="endDate"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
-              <div>
-                <h2 className="text-lg font-semibold text-gray-800 mb-2">
-                  Anggaran
+              {/* Budget Section */}
+              <div className="bg-gray-50 p-6 rounded-2xl">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4 pb-2 border-b border-gray-200">
+                  Anggaran Proyek
                 </h2>
-                <div className="grid grid-cols-2 gap-4">
-                  <input
-                    name="budget.fiscalYear"
-                    placeholder="Tahun Anggaran"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
-                  <input
-                    name="budget.fundingSource"
-                    placeholder="Sumber Dana"
-                    onChange={handleChange}
-                    className="w-full p-3 border border-gray-300 rounded-3xl"
-                  />
+                <div className="space-y-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Tahun Anggaran*
+                    </label>
+                    <input
+                      name="budget.fiscalYear"
+                      placeholder="Contoh: 2023"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                      Sumber Dana*
+                    </label>
+                    <input
+                      name="budget.fundingSource"
+                      placeholder="Contoh: APBD Kabupaten/Dana Desa"
+                      onChange={handleChange}
+                      className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-gray-800 text-white py-5 rounded-full font-semibold hover:bg-blue-700 transition duration-200"
+                className="w-full bg-blue-600 text-white py-4 rounded-xl font-semibold hover:bg-blue-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 mt-6"
               >
                 Simpan Proyek
               </button>

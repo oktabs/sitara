@@ -18,10 +18,13 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      const response = await axios.post("/api/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "https://sitaragov.vercel.app/api/auth/login",
+        {
+          email,
+          password,
+        },
+      );
 
       const token = response.data.token;
       localStorage.setItem("token", token);

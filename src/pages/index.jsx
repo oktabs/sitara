@@ -67,7 +67,7 @@ const LoginPage = () => {
       </Head>
 
       <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
+        {/* <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
           <div className="text-center mb-8">
             <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
               <svg
@@ -87,7 +87,7 @@ const LoginPage = () => {
             </div>
             <h2 className="text-2xl font-bold text-gray-800">Login Admin</h2>
             <p className="text-gray-600 mt-1">Masukkan kredensial Anda</p>
-          </div>
+          </div> */}
 
           {error && (
             <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">

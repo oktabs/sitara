@@ -32,9 +32,9 @@ const LoginPage = () => {
       const decoded = jwtDecode(token);
 
       if (decoded.role === "admin_kecamatan") {
-        router.push("/projects/add");
+        router.push("/projects");
       } else if (decoded.role === "kontraktor_desa") {
-        router.push("/progress");
+        router.push("/projects");
       } else {
         setError("Role tidak diizinkan mengakses dashboard ini.");
         localStorage.removeItem("token");

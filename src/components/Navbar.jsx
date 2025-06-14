@@ -4,10 +4,10 @@ import { useRouter } from "next/router";
 import { Icon } from "@iconify/react";
 
 const menuItems = [
-  { title: "Projects", href: "/projects", icon: "mdi:hammer-wrench" },
-  { title: "Budget", href: "/budget", icon: "mdi:currency-usd" },
-  { title: "Progress", href: "/progress", icon: "mdi:progress-check" },
-  { title: "News", href: "/news", icon: "mdi:newspaper" },
+  { title: "Manajemen Proyek", href: "/projects", icon: "mdi:hammer-wrench" },
+  { title: "Semua Proyek & Progress", href: "/progress", icon: "mdi:currency-usd" },
+  { title: "Berita-berita Tentang Proyek", href: "/news", icon: "mdi:newspaper" },
+  { title: "Profile", href: "/profile", icon: "mdi:newspaper" },
 ];
 
 const Navbar = () => {

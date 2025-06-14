@@ -1,3 +1,4 @@
+// src/pages/api/projects/[id].js
 import connectDB from '@/lib/mongodb';
 import Project from '@/models/Project';
 import cors from '@/middleware/cors';

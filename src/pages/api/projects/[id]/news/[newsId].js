@@ -27,10 +27,11 @@ export default async function handler(req, res) {
   }
 
   if (req.method === 'DELETE') {
-    news.remove();
+    // ❗ Perbaikan di sini:
+    project.news.pull(newsId);
     await project.save();
     return res.status(200).json({ message: 'News deleted' });
   }
 
-  res.status(405).json({ error: 'Method not allowed' });
+  return res.status(405).json({ error: 'Method not allowed' });
 }

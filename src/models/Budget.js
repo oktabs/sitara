@@ -1,3 +1,4 @@
+// erc/models/Budget.js
 import mongoose from "mongoose";
 import ItemSchema from "./Item.js";
 

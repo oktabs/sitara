@@ -1,241 +1,261 @@
-import { useState } from "react";
-import axios from "axios";
-import { useRouter } from "next/router";
-import { jwtDecode } from "jwt-decode";
-import Link from "next/link";
 import Head from "next/head";
+import { motion } from "framer-motion";
+import Link from "next/link";
 
-const LoginPage = () => {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const router = useRouter();
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError(null);
-    setLoading(true);
-
-    try {
-      const response = await axios.post(
-        "https://sitaragov.vercel.app/api/auth/login",
-        {
-          email,
-          password,
-        },
-      );
-
-      const token = response.data.token;
-      localStorage.setItem("token", token);
-
-      const decoded = jwtDecode(token);
-
-      if (decoded.role === "admin_kecamatan") {
-        router.push("/home");
-      } else if (decoded.role === "kontraktor_desa") {
-        router.push("/progress");
-      } else {
-        setError("Role tidak diizinkan mengakses dashboard ini.");
-        localStorage.removeItem("token");
-      }
-    } catch (error) {
-      if (error.response) {
-        switch (error.response.status) {
-          case 401:
-            setError("Email atau password salah");
-            break;
-          case 500:
-            setError("Server error. Silakan coba lagi nanti");
-            break;
-          default:
-            setError("Terjadi kesalahan. Silakan coba lagi");
-        }
-      } else {
-        setError("Tidak bisa terhubung ke server");
-      }
-    } finally {
-      setLoading(false);
-    }
-  };
-
+const HomePage = () => {
   return (
     <>
       <Head>
-        <title>Login - Sitaragov</title>
-        <meta name="description" content="Halaman login admin Sitaragov" />
+        <title>SITARA</title>
       </Head>
-
-      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-gray-100 flex items-center justify-center px-4 py-12">
-        <div className="w-full max-w-md bg-white p-8 rounded-xl shadow-lg">
-          {/* <div className="text-center mb-8">
-            <div className="mx-auto w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-4">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-8 w-8 text-blue-600"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"
-                />
-              </svg>
-            </div>
-            <h2 className="text-2xl font-bold text-gray-800">Login Admin</h2>
-            <p className="text-gray-600 mt-1">Masukkan kredensial Anda</p>
-          </div> */}
-
-          {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded">
+      <div>
+        {/* Navbar */}
+        <nav className="bg-white shadow-lg fixed w-full top-0 z-50">
+          <div className="container mx-auto px-6 py-3">
+            <div className="flex justify-between items-center">
               <div className="flex items-center">
-                <svg
-                  className="h-5 w-5 text-red-500 mr-2"
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 20 20"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-                <span className="text-red-700 font-medium">{error}</span>
-              </div>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-5">
-            <div>
-              <label
-                htmlFor="email"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Email
-              </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="admin@example.com"
-                autoComplete="username"
-              />
-            </div>
-
-            <div>
-              <label
-                htmlFor="password"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                Password
-              </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                required
-                className="w-full px-4 py-3 border border-gray-300 text-black rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                placeholder="••••••••"
-                autoComplete="current-password"
-              />
-            </div>
-
-            <div className="flex items-center justify-between">
-              <div className="flex items-center">
-                <input
-                  id="remember-me"
-                  name="remember-me"
-                  type="checkbox"
-                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                />
-                <label
-                  htmlFor="remember-me"
-                  className="ml-2 block text-sm text-gray-700"
-                >
-                  Ingat saya
-                </label>
+                <Link href="/" className="text-2xl font-bold text-blue-600">
+                  SITARA
+                </Link>
               </div>
 
-              <div className="text-sm">
+              <div className="hidden md:flex items-center space-x-8">
                 <Link
-                  href="/forgot-password"
-                  className="font-medium text-blue-600 hover:text-blue-500"
+                  href="#tentang"
+                  className="text-gray-700 hover:text-blue-600 transition duration-300"
                 >
-                  Lupa password?
+                  Tentang
+                </Link>
+                <Link
+                  href="#fitur"
+                  className="text-gray-700 hover:text-blue-600 transition duration-300"
+                >
+                  Fitur
+                </Link>
+                <Link
+                  href="#kontak"
+                  className="text-gray-700 hover:text-blue-600 transition duration-300"
+                >
+                  Kontak
+                </Link>
+                <Link
+                  href="/auth/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition duration-300"
+                >
+                  Login
+                </Link>
+              </div>
+
+              {/* Mobile menu button */}
+              <div className="md:hidden">
+                <Link
+                  href="/auth/login"
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full text-sm transition duration-300"
+                >
+                  Login
                 </Link>
               </div>
             </div>
+          </div>
+        </nav>
 
-            <button
-              type="submit"
-              disabled={loading}
-              className={`w-full flex justify-center py-3 px-4 border border-transparent rounded-lg shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 ${
-                loading ? "opacity-70 cursor-not-allowed" : ""
-              }`}
+        {/* Hero Section */}
+        <section
+          className="relative bg-cover bg-center min-h-[80vh] flex items-center justify-center text-center text-white px-6 mt-16"
+          style={{ backgroundImage: "url('/image.png')" }}
+        >
+          <div className="absolute inset-0 bg-black bg-opacity-50"></div>
+          <motion.div
+            className="relative z-10"
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1 }}
+          >
+            <h1 className="text-6xl font-bold drop-shadow-lg animate-fade-in">
+              Selamat Datang di SITARA
+            </h1>
+            <p className="text-xl mt-4 opacity-90 animate-slide-up">
+              Sistem Pemantauan Pembangunan Kecamatan
+            </p>
+            <motion.a
+              href="#tentang"
+              className="mt-6 inline-block bg-blue-600 hover:bg-blue-500 transition duration-300 text-white px-8 py-4 rounded-full text-lg shadow-lg"
+              whileHover={{ scale: 1.1 }}
             >
-              {loading ? (
-                <>
-                  <svg
-                    className="animate-spin -ml-1 mr-3 h-5 w-5 text-white"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                  >
-                    <circle
-                      className="opacity-25"
-                      cx="12"
-                      cy="12"
-                      r="10"
-                      stroke="currentColor"
-                      strokeWidth="4"
-                    ></circle>
-                    <path
-                      className="opacity-75"
-                      fill="currentColor"
-                      d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
-                    ></path>
-                  </svg>
-                  Memproses...
-                </>
-              ) : (
-                "Masuk"
-              )}
-            </button>
-          </form>
+              Pelajari Lebih Lanjut
+            </motion.a>
+          </motion.div>
+        </section>
 
-          {/* <div className="mt-6">
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-gray-300"></div>
-              </div>
-              <div className="relative flex justify-center text-sm">
-                <span className="px-2 bg-white text-gray-500">
-                  Atau kembali ke
-                </span>
-              </div>
-            </div>
+        {/* Tentang SITARA */}
+        <section
+          id="tentang"
+          className="container mx-auto px-6 py-16 text-center"
+        >
+          <h2 className="text-4xl font-bold text-gray-800">Apa itu SITARA?</h2>
+          <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
+            SITARA adalah platform untuk mengelola, merencanakan, dan memantau
+            pembangunan kecamatan secara transparan dan real-time.
+          </p>
+        </section>
 
-            <div className="mt-4 text-center">
-              <Link
-                href="/"
-                className="font-medium text-blue-600 hover:text-blue-500"
+        {/* Statistik dengan animasi */}
+        <section className="bg-gray-100 py-16 text-center">
+          <h2 className="text-4xl font-bold text-gray-800 mb-10">
+            Dampak SITARA
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                value: "100+",
+                label: "Proyek Terpantau",
+                color: "text-blue-600",
+              },
+              {
+                value: "5000+",
+                label: "Masyarakat Terbantu",
+                color: "text-green-500",
+              },
+              {
+                value: "98%",
+                label: "Tingkat Kepercayaan",
+                color: "text-gray-700",
+              },
+            ].map((item, index) => (
+              <motion.div
+                key={index}
+                className={`${item.color} text-5xl font-bold`}
+                initial={{ opacity: 0, scale: 0.5 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 1, delay: index * 0.3 }}
               >
-                Halaman Beranda
-              </Link>
+                {item.value}
+                <p className="text-gray-600 text-lg mt-2">{item.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Fitur Utama */}
+        <section className="container mx-auto px-6 py-12">
+          <h2 className="text-4xl font-bold text-gray-800 text-center mb-10">
+            Fitur Utama
+          </h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              "📊 Dashboard Real-Time",
+              "🗺️ Peta Interaktif",
+              "📄 Laporan Transparan",
+              "📢 Notifikasi Update",
+              "💬 Forum Masyarakat",
+              "📅 Jadwal Proyek",
+            ].map((fitur, index) => (
+              <motion.div
+                key={index}
+                className="bg-white shadow-lg hover:shadow-2xl p-6 rounded-lg text-center border-t-4 border-blue-600"
+                initial={{ opacity: 0, y: 50 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1, delay: index * 0.2 }}
+              >
+                <h3 className="text-xl font-semibold text-blue-600">{fitur}</h3>
+                <p className="text-gray-600 mt-2">
+                  Fitur canggih untuk memudahkan pemantauan proyek.
+                </p>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="bg-gradient-to-r from-blue-600 to-blue-400 text-white text-center py-16">
+          <motion.h2
+            className="text-4xl font-bold"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
+          >
+            Mulai Gunakan SITARA Sekarang!
+          </motion.h2>
+          <p className="text-lg mt-4 opacity-90">
+            Daftar dan pantau perkembangan pembangunan dengan lebih mudah.
+          </p>
+          <motion.a
+            href="/register"
+            className="mt-6 inline-block bg-white text-blue-600 font-semibold hover:bg-gray-200 transition duration-300 px-8 py-4 rounded-full text-lg shadow-lg"
+            whileHover={{ scale: 1.1 }}
+          >
+            Daftar Sekarang
+          </motion.a>
+        </section>
+
+        {/* Footer */}
+        <footer className="bg-blue-900 text-white text-center py-10 px-6">
+          <div className="container mx-auto grid md:grid-cols-3 gap-8 text-left">
+            <div>
+              <h3 className="text-2xl font-bold">SITARA</h3>
+              <p className="mt-2 text-gray-300 text-sm">
+                Sistem Pemantauan Pembangunan Kecamatan Antang Kalang,
+                memberikan transparansi dalam pembangunan dan fasilitas publik.
+              </p>
             </div>
-          </div> */}
-        </div>
+
+            <div>
+              <h4 className="text-xl font-semibold">Navigasi</h4>
+              <ul className="mt-2 space-y-2">
+                <li>
+                  <a href="#tentang" className="hover:text-gray-400">
+                    Tentang SITARA
+                  </a>
+                </li>
+                <li>
+                  <a href="#fitur" className="hover:text-gray-400">
+                    Fitur Utama
+                  </a>
+                </li>
+                <li>
+                  <a href="#kontak" className="hover:text-gray-400">
+                    Kontak Kami
+                  </a>
+                </li>
+                <li>
+                  <a href="/register" className="hover:text-gray-400">
+                    Daftar
+                  </a>
+                </li>
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="text-xl font-semibold">Kontak Kami</h4>
+              <p className="mt-2 text-gray-300 text-sm">
+                Email: info@sitara.id
+              </p>
+              <p className="text-gray-300 text-sm">
+                Telepon: +62 812-3456-7890
+              </p>
+              <div className="flex space-x-4 mt-4">
+                <a href="#" className="hover:text-gray-400">
+                  🔵 Facebook
+                </a>
+                <a href="#" className="hover:text-gray-400">
+                  🔷 Twitter
+                </a>
+                <a href="#" className="hover:text-gray-400">
+                  📸 Instagram
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 border-t border-gray-700 pt-4">
+            <p className="text-sm opacity-75">
+              © 2024 SITARA. Semua Hak Dilindungi.
+            </p>
+          </div>
+        </footer>
       </div>
     </>
   );
 };
 
-export default LoginPage;
+export default HomePage;

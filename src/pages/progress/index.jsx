@@ -1,6 +1,8 @@
 import Navbar from "@/components/Navbar";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import { jsPDF } from "jspdf";
+import "jspdf-autotable";
 
 const ProgressPage = () => {
   const [projects, setProjects] = useState([]);
@@ -57,6 +59,108 @@ const ProgressPage = () => {
     }
   };
 
+  const exportToPDF = () => {
+    const doc = new jsPDF();
+    
+    // Add title
+    doc.setFontSize(18);
+    doc.text('Project Progress Report', 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Generated on: ${new Date().toLocaleDateString()}`, 14, 30);
+    
+    // Add each project as a separate page
+    projects.forEach((project, index) => {
+      if (index > 0) {
+        doc.addPage();
+      }
+      
+      let yPosition = 40;
+      
+      // Project header
+      doc.setFontSize(14);
+      doc.setTextColor(0, 0, 255);
+      doc.text(project.name, 14, yPosition);
+      yPosition += 10;
+      
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text(`Status: ${project.status}`, 14, yPosition);
+      yPosition += 8;
+      
+      // Basic info
+      doc.text(`Location: ${project.location.village}, ${project.location.district}`, 14, yPosition);
+      yPosition += 8;
+      doc.text(`Coordinates: Lat ${project.location.coordinates.lat}, Lng ${project.location.coordinates.lng}`, 14, yPosition);
+      yPosition += 8;
+      doc.text(`Contractor: ${project.contractor.name} (${project.contractor.contact})`, 14, yPosition);
+      yPosition += 8;
+      doc.text(`Description: ${project.description}`, 14, yPosition);
+      yPosition += 12;
+      
+      // Budget table
+      doc.setFontSize(12);
+      doc.setTextColor(0, 0, 0);
+      doc.text('Budget Information:', 14, yPosition);
+      yPosition += 8;
+      
+      const budgetData = [
+        ['Total Budget', formatCurrency(project.budget.totalBudget)],
+        ['Fiscal Year', project.budget.fiscalYear],
+        ['Funding Source', project.budget.fundingSource]
+      ];
+      
+      doc.autoTable({
+        startY: yPosition,
+        head: [['Item', 'Value']],
+        body: budgetData,
+        theme: 'grid',
+        headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+        margin: { left: 14 }
+      });
+      
+      yPosition = doc.lastAutoTable.finalY + 10;
+      
+      // Progress information
+      const latestProgress = getLatestProgress(project.progress);
+      if (latestProgress) {
+        doc.text('Latest Progress:', 14, yPosition);
+        yPosition += 8;
+        
+        doc.text(`Completion: ${latestProgress.percentage}%`, 14, yPosition);
+        yPosition += 8;
+        
+        if (latestProgress.notes) {
+          doc.text(`Notes: ${latestProgress.notes}`, 14, yPosition);
+          yPosition += 8;
+        }
+        
+        doc.text(`Date: ${formatDate(latestProgress.date)}`, 14, yPosition);
+        yPosition += 12;
+      }
+      
+      // Timeline
+      doc.text('Timeline:', 14, yPosition);
+      yPosition += 8;
+      
+      const timelineData = [
+        ['Start Date', formatDate(project.startDate)],
+        ['End Date', formatDate(project.endDate)],
+        ['Created', formatDate(project.createdAt)],
+        ['Last Updated', formatDate(project.updatedAt)]
+      ];
+      
+      doc.autoTable({
+        startY: yPosition,
+        body: timelineData,
+        theme: 'grid',
+        margin: { left: 14 }
+      });
+    });
+    
+    // Save the PDF
+    doc.save('project-progress-report.pdf');
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-white">
@@ -84,7 +188,20 @@ const ProgressPage = () => {
       <Navbar />
       
       <div className="pt-32 container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold text-black mb-8">Project Progress</h1>
+        <div className="flex justify-between items-center mb-8">
+          <h1 className="text-3xl font-bold text-black">Project Progress</h1>
+          {projects.length > 0 && (
+            <button 
+              onClick={exportToPDF}
+              className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg flex items-center"
+            >
+              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+              </svg>
+              Export to PDF
+            </button>
+          )}
+        </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
           {projects.map((project) => {

@@ -19,7 +19,7 @@ const Navbar = () => {
   return (
     <div className="fixed top-5 left-0 right-0 z-50">
       <nav className="flex justify-center">
-        <div className="p-5 bg-gray-800 rounded-full text-white w-fit">
+        <div className="p-5 bg-blue-800 rounded-full text-white w-fit">
           {/* Hamburger (Mobile) */}
           <div className="flex justify-between items-center md:hidden">
             <button
@@ -50,7 +50,7 @@ const Navbar = () => {
                       href={href}
                       className={`flex items-center gap-2 px-3 py-2 rounded-full text-center transition-all ${
                         isActive
-                          ? "bg-gray-700 font-semibold"
+                          ? "bg-blue-500 font-semibold"
                           : "hover:bg-gray-700"
                       }`}
                       onClick={() => setIsOpen(false)}

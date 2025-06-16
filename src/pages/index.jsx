@@ -21,24 +21,6 @@ const HomePage = () => {
 
               <div className="hidden md:flex items-center space-x-8">
                 <Link
-                  href="#tentang"
-                  className="text-gray-700 hover:text-blue-600 transition duration-300"
-                >
-                  Tentang
-                </Link>
-                <Link
-                  href="#fitur"
-                  className="text-gray-700 hover:text-blue-600 transition duration-300"
-                >
-                  Fitur
-                </Link>
-                <Link
-                  href="#kontak"
-                  className="text-gray-700 hover:text-blue-600 transition duration-300"
-                >
-                  Kontak
-                </Link>
-                <Link
                   href="/auth/login"
                   className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-full transition duration-300"
                 >
@@ -77,28 +59,9 @@ const HomePage = () => {
             <p className="text-xl mt-4 opacity-90 animate-slide-up">
               Sistem Pemantauan Pembangunan Kecamatan
             </p>
-            <motion.a
-              href="#tentang"
-              className="mt-6 inline-block bg-blue-600 hover:bg-blue-500 transition duration-300 text-white px-8 py-4 rounded-full text-lg shadow-lg"
-              whileHover={{ scale: 1.1 }}
-            >
-              Pelajari Lebih Lanjut
-            </motion.a>
           </motion.div>
         </section>
 
-        {/* Tentang SITARA */}
-        <section
-          id="tentang"
-          className="container mx-auto px-6 py-16 text-center"
-        >
-          <h2 className="text-4xl font-bold text-gray-800">Apa itu SITARA?</h2>
-          <p className="text-lg text-gray-600 mt-4 max-w-3xl mx-auto">
-            SITARA adalah platform untuk mengelola, merencanakan, dan memantau
-            pembangunan kecamatan secara transparan dan real-time.
-          </p>
-        </section>
-        
         {/* Footer */}
         <footer className="bg-blue-900 text-white text-center py-10 px-6">
           <div className="container mx-auto grid md:grid-cols-3 gap-8 text-left">
@@ -113,21 +76,6 @@ const HomePage = () => {
             <div>
               <h4 className="text-xl font-semibold">Navigasi</h4>
               <ul className="mt-2 space-y-2">
-                <li>
-                  <a href="#tentang" className="hover:text-gray-400">
-                    Tentang SITARA
-                  </a>
-                </li>
-                <li>
-                  <a href="#fitur" className="hover:text-gray-400">
-                    Fitur Utama
-                  </a>
-                </li>
-                <li>
-                  <a href="#kontak" className="hover:text-gray-400">
-                    Kontak Kami
-                  </a>
-                </li>
                 <li>
                   <a href="/register" className="hover:text-gray-400">
                     Daftar

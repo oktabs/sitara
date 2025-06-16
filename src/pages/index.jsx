@@ -57,7 +57,7 @@ const HomePage = () => {
               Selamat Datang di SITARA
             </h1>
             <p className="text-xl mt-4 opacity-90 animate-slide-up">
-              Sistem Pemantauan Pembangunan Kecamatan
+              Sistem Informasi Transparansi Anggaran 
             </p>
           </motion.div>
         </section>

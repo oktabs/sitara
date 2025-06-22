@@ -2,7 +2,7 @@ import Navbar from "@/components/Navbar";
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { jsPDF } from "jspdf";
-import "jspdf-autotable";
+import autoTable from "jspdf-autotable";
 
 const HalamanProgres = () => {
   const [proyek, setProyek] = useState([]);
@@ -109,7 +109,7 @@ const HalamanProgres = () => {
         ['Sumber Dana', proyek.budget.fundingSource]
       ];
       
-      doc.autoTable({
+      autoTable(doc, {
         startY: posisiY,
         head: [['Item', 'Nilai']],
         body: dataAnggaran,
@@ -149,7 +149,7 @@ const HalamanProgres = () => {
         ['Terakhir Diperbarui', formatTanggal(proyek.updatedAt)]
       ];
       
-      doc.autoTable({
+      autoTable(doc, {
         startY: posisiY,
         body: dataTimeline,
         theme: 'grid',
@@ -159,6 +159,218 @@ const HalamanProgres = () => {
     
     // Simpan PDF
     doc.save('laporan-progres-proyek.pdf');
+  };
+
+  const eksporProyekTunggal = (proyekData) => {
+    const doc = new jsPDF();
+    
+    // Judul
+    doc.setFontSize(18);
+    doc.text('Laporan Proyek Individual', 14, 20);
+    doc.setFontSize(12);
+    doc.text(`Dibuat pada: ${new Date().toLocaleDateString()}`, 14, 30);
+    
+    let posisiY = 40;
+    
+    // Header proyek
+    doc.setFontSize(16);
+    doc.setTextColor(0, 0, 255);
+    doc.text(proyekData.name, 14, posisiY);
+    posisiY += 12;
+    
+    doc.setFontSize(12);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`Status: ${proyekData.status}`, 14, posisiY);
+    posisiY += 8;
+    doc.text(`ID Proyek: ${proyekData._id}`, 14, posisiY);
+    posisiY += 12;
+    
+    // Deskripsi
+    doc.text('Deskripsi Proyek:', 14, posisiY);
+    posisiY += 8;
+    const splitText = doc.splitTextToSize(proyekData.description, 180);
+    doc.text(splitText, 14, posisiY);
+    posisiY += splitText.length * 6 + 8;
+    
+    // Informasi lokasi
+    doc.text('Informasi Lokasi:', 14, posisiY);
+    posisiY += 8;
+    doc.text(`Desa: ${proyekData.location.village}`, 14, posisiY);
+    posisiY += 6;
+    doc.text(`Kecamatan: ${proyekData.location.district}`, 14, posisiY);
+    posisiY += 6;
+    doc.text(`Koordinat: Lat ${proyekData.location.coordinates.lat}, Lng ${proyekData.location.coordinates.lng}`, 14, posisiY);
+    posisiY += 12;
+    
+    // Informasi kontraktor
+    doc.text('Informasi Kontraktor:', 14, posisiY);
+    posisiY += 8;
+    doc.text(`Nama: ${proyekData.contractor.name}`, 14, posisiY);
+    posisiY += 6;
+    doc.text(`Kontak: ${proyekData.contractor.contact}`, 14, posisiY);
+    posisiY += 6;
+    if (proyekData.contractor.address) {
+      doc.text(`Alamat: ${proyekData.contractor.address}`, 14, posisiY);
+      posisiY += 6;
+    }
+    posisiY += 8;
+    
+    // Tabel anggaran
+    doc.text('Informasi Anggaran:', 14, posisiY);
+    posisiY += 8;
+    
+    const dataAnggaran = [
+      ['Total Anggaran', formatMataUang(proyekData.budget.totalBudget)],
+      ['Tahun Anggaran', proyekData.budget.fiscalYear],
+      ['Sumber Dana', proyekData.budget.fundingSource]
+    ];
+    
+    autoTable(doc, {
+      startY: posisiY,
+      head: [['Item', 'Nilai']],
+      body: dataAnggaran,
+      theme: 'grid',
+      headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+      margin: { left: 14 }
+    });
+    
+    posisiY = doc.lastAutoTable.finalY + 10;
+    
+    // Item anggaran detail
+    if (proyekData.budget.items && proyekData.budget.items.length > 0) {
+      if (posisiY > 250) {
+        doc.addPage();
+        posisiY = 20;
+      }
+      
+      doc.text('Detail Item Anggaran:', 14, posisiY);
+      posisiY += 8;
+      
+      const itemData = proyekData.budget.items.map(item => [
+        item.description,
+        item.volume.toString(),
+        item.unit,
+        formatMataUang(item.unitPrice),
+        formatMataUang(item.volume * item.unitPrice)
+      ]);
+      
+      autoTable(doc, {
+        startY: posisiY,
+        head: [['Deskripsi', 'Volume', 'Satuan', 'Harga Satuan', 'Total']],
+        body: itemData,
+        theme: 'grid',
+        headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+        margin: { left: 14 }
+      });
+      
+      posisiY = doc.lastAutoTable.finalY + 10;
+    }
+    
+    // Informasi progres
+    if (proyekData.progress && proyekData.progress.length > 0) {
+      if (posisiY > 250) {
+        doc.addPage();
+        posisiY = 20;
+      }
+      
+      doc.text('Riwayat Progres:', 14, posisiY);
+      posisiY += 8;
+      
+      const progresTerakhir = getProgresTerakhir(proyekData.progress);
+      if (progresTerakhir) {
+        doc.text(`Progres Terakhir: ${progresTerakhir.percentage}%`, 14, posisiY);
+        posisiY += 6;
+        doc.text(`Tanggal: ${formatTanggal(progresTerakhir.date)}`, 14, posisiY);
+        posisiY += 6;
+        if (progresTerakhir.notes) {
+          doc.text('Catatan:', 14, posisiY);
+          posisiY += 6;
+          const notesText = doc.splitTextToSize(progresTerakhir.notes, 180);
+          doc.text(notesText, 14, posisiY);
+          posisiY += notesText.length * 6;
+        }
+        posisiY += 8;
+      }
+      
+      // Tabel semua progres
+      const progresData = proyekData.progress.map((p, index) => [
+        (index + 1).toString(),
+        `${p.percentage}%`,
+        formatTanggal(p.date),
+        p.notes || '-'
+      ]);
+      
+      autoTable(doc, {
+        startY: posisiY,
+        head: [['No', 'Persentase', 'Tanggal', 'Catatan']],
+        body: progresData,
+        theme: 'grid',
+        headStyles: { fillColor: [41, 128, 185], textColor: 255 },
+        margin: { left: 14 }
+      });
+      
+      posisiY = doc.lastAutoTable.finalY + 10;
+    }
+    
+    // Berita proyek
+    if (proyekData.news && proyekData.news.length > 0) {
+      if (posisiY > 200) {
+        doc.addPage();
+        posisiY = 20;
+      }
+      
+      doc.text('Berita Proyek:', 14, posisiY);
+      posisiY += 8;
+      
+      proyekData.news.forEach((berita, index) => {
+        if (posisiY > 250) {
+          doc.addPage();
+          posisiY = 20;
+        }
+        
+        doc.setFontSize(11);
+        doc.setTextColor(0, 0, 255);
+        doc.text(`${index + 1}. ${berita.title}`, 14, posisiY);
+        posisiY += 6;
+        
+        doc.setFontSize(10);
+        doc.setTextColor(0, 0, 0);
+        doc.text(`Tanggal: ${formatTanggal(berita.createdAt)}`, 14, posisiY);
+        posisiY += 6;
+        
+        const contentText = doc.splitTextToSize(berita.content, 180);
+        doc.text(contentText, 14, posisiY);
+        posisiY += contentText.length * 5 + 8;
+      });
+    }
+    
+    // Timeline di halaman terakhir
+    if (posisiY > 200) {
+      doc.addPage();
+      posisiY = 20;
+    }
+    
+    doc.setFontSize(12);
+    doc.text('Timeline Proyek:', 14, posisiY);
+    posisiY += 10;
+    
+    const dataTimeline = [
+      ['Tanggal Mulai', formatTanggal(proyekData.startDate)],
+      ['Tanggal Selesai', formatTanggal(proyekData.endDate)],
+      ['Dibuat', formatTanggal(proyekData.createdAt)],
+      ['Terakhir Diperbarui', formatTanggal(proyekData.updatedAt)]
+    ];
+    
+    autoTable(doc, {
+      startY: posisiY,
+      body: dataTimeline,
+      theme: 'grid',
+      margin: { left: 14 }
+    });
+    
+    // Simpan PDF dengan nama proyek
+    const namaFile = `laporan-${proyekData.name.replace(/[^a-zA-Z0-9]/g, '-').toLowerCase()}.pdf`;
+    doc.save(namaFile);
   };
 
   if (memuat) {
@@ -188,19 +400,8 @@ const HalamanProgres = () => {
       <Navbar />
       
       <div className="pt-32 container mx-auto px-4 py-8">
-        <div className="flex justify-between items-center mb-8">
+        <div className="mb-8">
           <h1 className="text-3xl font-bold text-black">Progres Proyek</h1>
-          {proyek.length > 0 && (
-            <button 
-              onClick={eksporKePDF}
-              className="bg-red-600 hover:bg-red-700 text-white font-medium py-2 px-4 rounded-lg flex items-center"
-            >
-              <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
-              </svg>
-              Ekspor ke PDF
-            </button>
-          )}
         </div>
         
         <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
@@ -368,8 +569,20 @@ const HalamanProgres = () => {
                   
                   {/* ID Proyek */}
                   <div className="mt-3 pt-2 border-t">
-                    <div className="text-xs text-black">
-                      ID: {proyek._id}
+                    <div className="flex justify-between items-center">
+                      <div className="text-xs text-black">
+                        ID: {proyek._id}
+                      </div>
+                      <button 
+                        onClick={() => eksporProyekTunggal(proyek)}
+                        className="bg-blue-600 hover:bg-blue-700 text-white text-xs font-medium py-1 px-3 rounded flex items-center"
+                        title="Ekspor proyek ini ke PDF"
+                      >
+                        <svg className="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10" />
+                        </svg>
+                        PDF
+                      </button>
                     </div>
                   </div>
                 </div>
